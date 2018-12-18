@@ -7,12 +7,12 @@ import org.json.JSONObject;
 
 /**
  * @author shangtingli
- *Represents the one the results of one fetch, 100 datapoints
+ *
  */
 public class Item {
 	private String date;
-	private String hour;
-	private String minute;
+	private int hour;
+	private int minute;
 	private double open;
 	private double high;
 	private double low;
@@ -48,28 +48,75 @@ public class Item {
 		return obj;
 	}
 	
+	public void print() {
+		System.out.print("Date: ");
+		System.out.print(this.date);
+		System.out.println();
+		System.out.print("Hour: ");
+		System.out.print(this.hour);
+		System.out.println();
+		System.out.print("Minute: ");
+		System.out.print(this.minute);
+		System.out.println();
+		System.out.print("Open: ");
+		System.out.print(this.open);
+		System.out.println();
+		System.out.print("Close: ");
+		System.out.print(this.close);
+		System.out.println();
+	}
+	public String getDate() {
+		return date;
+	}
+
+	public int getHour() {
+		return hour;
+	}
+
+	public int getMinute() {
+		return minute;
+	}
+
+	public double getOpen() {
+		return open;
+	}
+
+	public double getHigh() {
+		return high;
+	}
+
+	public double getLow() {
+		return low;
+	}
+
+	public double getClose() {
+		return close;
+	}
+
+	public double getVolume() {
+		return volume;
+	}
 	public static class ItemBuilder{
 		private String date;
-		private String hour;
-		private String minute;
-		public String getHour() {
-			return hour;
-		}
-		public void setHour(String hour) {
-			this.hour = hour;
-		}
-		public String getMinute() {
-			return minute;
-		}
-		public void setMinute(String minute) {
-			this.minute = minute;
-		}
-
+		private int hour;
+		private int minute;
 		private double open;
 		private double high;
 		private double low;
 		private double close;
 		private double volume;
+		public int getHour() {
+			return hour;
+		}
+		public void setHour(int hour) {
+			this.hour = hour;
+		}
+		public int getMinute() {
+			return minute;
+		}
+		public void setMinute(int minute) {
+			this.minute = minute;
+		}
 		public String getDate() {
 			return date;
 		}
@@ -106,9 +153,10 @@ public class Item {
 		public void setVolume(double volume) {
 			this.volume = volume;
 		}
-		
 		public Item build() {
 			return new Item(this);
 		}
 	}
 }
+
+
