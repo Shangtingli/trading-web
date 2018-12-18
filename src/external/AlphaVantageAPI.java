@@ -2,13 +2,9 @@ package external;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection; 
 import java.net.URL;
-import java.net.URLEncoder;
 
-//import org.graalvm.compiler.lir.aarch64.AArch64Move.CompareAndSwapOp;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
