@@ -8,6 +8,7 @@ import entity.Item;
 import external.AlphaVantageAPI;
 
 public class MySQLConnection {
+	private int action_id;
 	private Connection conn;
 	
 	//Constructor for MySQLConnection
@@ -15,6 +16,11 @@ public class MySQLConnection {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
 			conn = DriverManager.getConnection(MySQLDBUtil.URL);
+			String sql = "SELECT COUNT(*) AS count FROM log;";
+			PreparedStatement statement =conn.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			action_id = rs.getInt("count");
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -118,12 +124,17 @@ public class MySQLConnection {
 		}
 		
 		try {
-			String sql = "SELECT position from users WHERE user_id = ? AND symbol = ?";
+			String sql = "SELECT position from stocks WHERE user_id = ? AND symbol = ?";
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			pStatement.setString(1, userid);
 			pStatement.setString(2, symbol);
+			System.out.println(pStatement.toString());
 			ResultSet rs = pStatement.executeQuery();
-			return rs.getDouble("position");
+			if (rs.next())
+			{return rs.getDouble("position");}
+			else {
+				return 0.0;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -141,17 +152,19 @@ public class MySQLConnection {
 		
 		try {
 			double position = getPosition(userid, symbol);
+			action_id ++ ;
 			/*
 			 * First Set up the logs
 			 */
-			String sql = "INSERT IGNORE INTO log(user_id,symbol,action,action_vol,price)" + 
-						"VALUES(?,?,?,?,?);";
+			String sql = "INSERT INTO log(action_id,user_id,symbol,action,action_vol,price)" + 
+						"VALUES(?,?,?,?,?,?);";
 			PreparedStatement pStatement = conn.prepareStatement(sql);
-			pStatement.setString(1, userid);
-			pStatement.setString(2, symbol);
-			pStatement.setString(3, action);
-			pStatement.setDouble(4, amount);
-			pStatement.setDouble(5, price);
+			pStatement.setString(1, Integer.toString(action_id));
+			pStatement.setString(2, userid);
+			pStatement.setString(3, symbol);
+			pStatement.setString(4, action);
+			pStatement.setDouble(5, amount);
+			pStatement.setDouble(6, price);
 			pStatement.execute();
 			/*
 			 * Then Update position
@@ -210,8 +223,73 @@ public class MySQLConnection {
 		}
 		
 	}
+	/*
+	 * Add Balance through external injection
+	 */
+	public void AddBalance(String userid, double amount) {
+		try {
+			String sql = "UPDATE users SET balance = balance + ? WHERE user_id = ?";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(2, userid);
+			statement.setDouble(1, amount);
+			statement.execute();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	public static void main(String[] args) {
 		MySQLConnection conn = new MySQLConnection();
+		for (int i=0; i < DataMock.MOCK_USER_NAMES.length; i++) {
+			conn.addUser(DataMock.MOCK_USER_NAMES[i], DataMock.MOCK_PASSWORDS[i], DataMock.MOCK_FIRST_NAMES[i], DataMock.MOCK_LAST_NAMES[i]);
+		}
+		/*
+		 * ========= Actions=================
+		 */
+		
+		/*
+		 * LST
+		 */
+		for (int i = 0; i < DataMock.MOCK_LST_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_ACTIONS[i], DataMock.MOCK_LST_AMOUNTS[i], DataMock.MOCK_LST_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		/*
+		 * WYY
+		 */
+		for (int i = 0; i < DataMock.MOCK_WYY_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[1], DataMock.MOCK_WYY_ACTIONS[i], DataMock.MOCK_WYY_AMOUNTS[i], DataMock.MOCK_WYY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		/*
+		 * AWD
+		 */
+		for (int i = 0; i < DataMock.MOCK_AWD_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[2], DataMock.MOCK_AWD_ACTIONS[i], DataMock.MOCK_AWD_AMOUNTS[i], DataMock.MOCK_AWD_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		/*
+		 * CXY
+		 */
+		for (int i = 0; i < DataMock.MOCK_CXY_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[3], DataMock.MOCK_CXY_ACTIONS[i], DataMock.MOCK_CXY_AMOUNTS[i], DataMock.MOCK_CXY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		/*
+		 * YZY
+		 */
+		for (int i = 0; i < DataMock.MOCK_YZY_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[4], DataMock.MOCK_YZY_ACTIONS[i], DataMock.MOCK_YZY_AMOUNTS[i], DataMock.MOCK_YZY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		/*
+		 * ZSJ
+		 */
+		for (int i = 0; i < DataMock.MOCK_ZSJ_ACTIONS.length; i++) {
+			conn.submitAction(DataMock.MOCK_USER_NAMES[5], DataMock.MOCK_ZSJ_ACTIONS[i], DataMock.MOCK_ZSJ_AMOUNTS[i], DataMock.MOCK_ZSJ_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		
+		/**
+		 * Add Balance
+		 */
+		conn.AddBalance(DataMock.MOCK_USER_NAMES[1], 1000);
+		conn.close();
 		
 	}
 }

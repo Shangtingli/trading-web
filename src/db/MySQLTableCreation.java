@@ -3,8 +3,6 @@ package db;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-import com.mysql.cj.xdevapi.Table;
-
 import db.MySQLDBUtil;
 
 import java.sql.Connection;
@@ -36,7 +34,7 @@ public class MySQLTableCreation {
 					+ "password VARCHAR(255) NOT NULL,"
 					+ "first_name VARCHAR(255) NOT NULL,"
 					+ "last_name VARCHAR (255) NOT NULL,"
-					+ "balance DOUBLE,"
+					+ "balance DOUBLE DEFAULT 0.0,"
 					+ "PRIMARY KEY (user_id)"
 					+ ")";
 			
@@ -54,24 +52,20 @@ public class MySQLTableCreation {
 			//Action could only be buy or sell
 			statement.executeUpdate(sql);
 			sql = "CREATE TABLE log ("
+					+ "action_id VARCHAR(255) NOT NULL,"
 					+ "user_id VARCHAR(255) NOT NULL,"
 					+ "symbol VARCHAR (255) NOT NULL,"
 					+ "action VARCHAR (255) NOT NULL,"
 					+ "action_vol INT NOT NULL,"
 					+ "time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
 					+ "price DOUBLE,"
-					+ "PRIMARY KEY (user_id, symbol),"
+					+ "PRIMARY KEY (action_id),"
 					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
 					+ ")";
-			
+//			System.out.println(sql);
 			statement.executeUpdate(sql);
 			
 			System.out.println("MySQL Table Creation Complete");
-			
-			boolean mock = true;
-			if (mock) {
-				
-			}
 		}
 		
 		catch (Exception e){
