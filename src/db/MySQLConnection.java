@@ -2,6 +2,8 @@ package db;
 	
 import java.sql.*;
 import java.util.*;
+
+
 import db.MySQLDBUtil;
 import db.DataMock;
 import entity.Item;
@@ -196,6 +198,10 @@ public class MySQLConnection {
 	 */
 	
 	public void updateBalance(String userid) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return;
+		}
 		AlphaVantageAPI api = new AlphaVantageAPI();
 		double newBalance = 0.0;
 		//Get the users portfolio of stocks
@@ -239,6 +245,31 @@ public class MySQLConnection {
 		}
 		
 	}
+	
+	public boolean Verify(String userid, String password) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return false;
+		}
+		try {
+			String sql = "SELECT user_id FROM users where user_id = ? AND password = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			pStatement.setString(2, password);
+			ResultSet res = pStatement.executeQuery();
+			while(res.next()) {
+				return true;
+			}
+			return false;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	/*
+	 * MAIN
+	 */
 	public static void main(String[] args) {
 		MySQLConnection conn = new MySQLConnection();
 		for (int i=0; i < DataMock.MOCK_USER_NAMES.length; i++) {

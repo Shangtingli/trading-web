@@ -7,10 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
+import db.MySQLConnection;
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/Login")
+@WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -27,7 +30,25 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		MySQLConnection conn = new MySQLConnection();
+		JSONObject obj = new JSONObject();
+		try {
+			String userid = request.getParameter("userid");
+   			String password = request.getParameter("password");
+   			if (conn.Verify(userid, password)) {
+   				obj.put("result", "success").put("user_id", userid);
+   			}
+   			else {
+   				obj.put("result", "failure");
+   			}
+   			RpcHelper.writeJsonObject(response, obj);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			conn.close();
+		}
 	}
 
 	/**
@@ -37,5 +58,5 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+/*http://localhost:8080/trading-web/login?userid=shangtingli&password=shangtingli*/
 }
