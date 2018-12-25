@@ -9,10 +9,12 @@
 </head>
 <body>
 	<header>
-		<div id = "login-form-container">
-			<p> 
+			<p class = "login-page-title"> 
 				Trading WebTech Login Interface
 			</p>
+	</header>
+	
+	<div id = "login-form-container">
 			
 			<form>
 				  <span> UserName: </span><br>
@@ -21,13 +23,12 @@
 				  <input type="text" id = "login-password-input"><br><br>
 				  <input type = "submit" id = "login-submit"> <br>
 			</form>
-			<p id = "login-error-notice">
+			<p id = "login-error-notice" class = "login-notice">
 				Invalid UserName or Password
 			</p>
-		</div>
-		<p id = "login-success-notice">
+			<p id = "login-success-notice" class = "login-notice">
 			Login Success! Returning to the parent page...
-		</p>
-	</header>
+			</p>
+	</div>
 </body>
 </html>

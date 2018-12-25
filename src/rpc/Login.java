@@ -37,7 +37,6 @@ public class Login extends HttpServlet {
 			String userid = request.getParameter("userid");
    			String password = request.getParameter("password");
    			if (conn.Verify(userid, password)) {
-   				System.out.println("succeed");
    				obj.put("result", "success").put("user_id", userid);
    			}
    			else {

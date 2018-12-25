@@ -14,6 +14,10 @@
         return element;
     }
 	
+	function $$(tag){
+		var element = window.opener.document.getElementById(tag);
+		return element;
+	}
 	function showElement(element){
 		console.log(element);
         element.style.display = 'block';
@@ -69,4 +73,6 @@
             xhr.send(data);
         }
     }
+    
+    
    

@@ -6,10 +6,11 @@
 	function onLogout(){
 		var register_btn = $("register-btn");
 		var login_btn = $("login-btn");
+		var logout_btn = $("logout-btn");
 		register_btn.addEventListener('click',showRegisterPopUp);
 		login_btn.addEventListener('click',showLoginPopUp);
+		logout_btn.addEventListener('click',destroyLogin);
 		initBalanceChart();
-		
 		first_call_loadDefaultWatchList();
 		var time = undefined;
 		if (time !== undefined)
@@ -18,6 +19,12 @@
 	
 	function onLogin(){
 		
+	}
+	
+	function destroyLogin(){
+		showElement($('login-button'));
+		hideElement($('logout-button'));
+		hideElement($('welcome-message'));
 	}
     window.onload = init;
 })();

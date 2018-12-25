@@ -22,8 +22,8 @@
 
 			// successfully logged in
 			if (result.result == 'success') {
-				showElement($('login-success-notice'));
-				navBarOnLogin();
+				OnLogin(result.user_id);
+				setTimeout(window.close,3000);
 			}
 			else{
 				showElement($('login-error-notice'));
@@ -38,10 +38,15 @@
 		
 	}
 	
-	function navBarOnLogin(){
-		showElement(window.opener.document.getElementById('logout-button'));
-		showElement(window.opener.document.getElementById('welcome-message'));
-		hideElement(window.opener.document.getElementById('login-button'));
+	function OnLogin(userid){
+		showElement($('login-success-notice'));
+		hideElement($('login-error-notice'));
+		var welcome = $$('welcome-message');
+		var logout_btn = $$('logout-button');
+		welcome.innerHTML = '<span>Welcome ' + userid + '</span>';
+		showElement(logout_btn);
+		showElement(welcome);
+		hideElement($$('login-button'));
 	}
     window.onload = init_login;
 })();
