@@ -6,7 +6,10 @@
 		login_btn.addEventListener('click',showLoginPopUp);
 		initBalanceChart();
 		initWatchList();
-		loadDefaultWatchList();
+		first_call_loadDefaultWatchList();
+		var time = undefined;
+		if (time !== undefined)
+		{var timeInt = setInterval(loadDefaultWatchList,time*1000);}
 	}
     
     function initWatchList(){

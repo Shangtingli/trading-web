@@ -1,5 +1,11 @@
-    function loadDefaultWatchList(){
+    function first_call_loadDefaultWatchList(){
+    	loadDefaultWatchList();
+    }
+    
+	function loadDefaultWatchList(){
     	var params = '';
+    	var element = $('watchlist-login');
+    	element.innerHTML = '';
     	showLoading('Refreshing WatchList');
     	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
     		var assetlabel = 'asset' + i.toString() + '=';
@@ -11,8 +17,6 @@
     			params += assetlabel + DEFAULT_WATCHLIST[i];
     		}
     	}
-        // The request parameters
-    	console.log(params);
         var url = './price';
 
         var req = JSON.stringify({});
@@ -30,6 +34,7 @@
            function() {
               console.log("Loading Default WatchList is Not Successful");
         });
+       
     }
 
 	function initBalanceChart(){

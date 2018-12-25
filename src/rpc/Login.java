@@ -31,6 +31,7 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		MySQLConnection conn = new MySQLConnection();
+		System.out.println("Hello i am do get method");
 		JSONObject obj = new JSONObject();
 		try {
 			String userid = request.getParameter("userid");

@@ -20,14 +20,15 @@
 }
 
 .watchlist-item{
-	height: 10vh;
-	width: 15vw;
+	height: 6vh;
+	width: 20vw;
 }
 
 .trend-icon{
 	width: 3vw;
 	height: 3vw;
 	margin-top: 2vh;
+	margin-right:1vw;
 }
 
 .watchlist-item-container{
