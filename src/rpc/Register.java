@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import db.MySQLConnection;
+
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Register
  */
-@WebServlet("/login")
-public class Login extends HttpServlet {
+@WebServlet("/register")
+public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public Register() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,20 +30,31 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		MySQLConnection conn = new MySQLConnection();
 		JSONObject obj = new JSONObject();
 		try {
 			String userid = request.getParameter("userid");
    			String password = request.getParameter("password");
-   			if (conn.Verify(userid, password)) {
-   				obj.put("result", "success").put("user_id", userid);
+   			String firstname = request.getParameter("firstname");
+   			String lastname = request.getParameter("lastname");
+   			boolean exists = conn.checkUser(userid);
+   			System.out.println(exists);
+   			if (exists) {
+   				obj.put("exists", "true");
    			}
    			else {
-   				System.out.println("failed");
-   				obj.put("result", "failure");
+   				obj.put("exists", "false");
+   	   			conn.addUser(userid, password, firstname, lastname);
    			}
-   			RpcHelper.writeJsonObject(response, obj);
+	   		RpcHelper.writeJsonObject(response, obj);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -52,12 +64,4 @@ public class Login extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-/*http://localhost:8080/trading-web/login?userid=shangtingli&password=shangtingli*/
 }

@@ -129,6 +129,7 @@ public class AlphaVantageAPI {
 		AlphaVantageAPI test = new AlphaVantageAPI();
 		JSONObject dummy = test.getResponse("");
 		List<Item> itemList = test.getItems(dummy);
+		System.out.println(test.constructQuery("MSFT"));
 		for (Item item: itemList) {
 			item.print();
 			System.out.println("===============");

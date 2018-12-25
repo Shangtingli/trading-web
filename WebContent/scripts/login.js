@@ -33,7 +33,6 @@
 		// error
 		function() {
 			console.log("Something is Wrong");
-			debugger;
 		});
 		
 	}

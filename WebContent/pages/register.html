@@ -2,9 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Trading Tech Register</title>
+<title>Trading Tech Register Interface</title>
+<script type="text/javascript" src = "../scripts/utils.js"></script>
+<script type="text/javascript" src = "../scripts/register.js"></script>
+<link rel="stylesheet" href="../styles/register.css">
 </head>
 <body>
-
+	<header>
+			<p class = "register-page-title"> 
+				Trading WebTech Register Interface
+			</p>
+	</header>
+	
+	<div id = "register-form-container">
+			
+			<form>
+				  <span> First Name: </span><br>
+				  <input type="text" id="register-firstname-input"><br><br>
+				  <span> Last Name:</span><br>
+				  <input type="text" id = "register-lastname-input"><br><br>
+				  <span> UserName: </span><br>
+				  <input type="text" id="register-username-input"><br><br>
+				  <span> PassWord:</span><br>
+				  <input type="text" id = "register-password-input"><br><br>
+				  <span> Confirm Your PassWord:</span><br>
+				  <input type="text" id = "register-password-input2"><br><br>
+				  <input type = "submit" id = "register-submit"> <br>
+			</form>
+			<p id = "register-empty-field-notice" class = "register-notice">
+				All the entries must be filled out.
+			</p>
+			<p id = "register-password-not-match-notice" class = "register-notice">
+				Two passwords must match each other.
+			</p>
+			<p id = "register-success-notice" class = "register-notice">
+				Register Success! Please Login On The Main Page...
+			</p>
+			<p id = "duplicate-username-notice" class = "register-notice">
+				UserName already exists.
+			</p>
+	</div>
 </body>
 </html>

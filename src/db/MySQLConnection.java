@@ -45,6 +45,33 @@ public class MySQLConnection {
 	}
 	
 	/*
+	 * See if a user already exists
+	 */
+	public boolean checkUser(String userid) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return false;
+		}
+		
+		try {
+			String sql = "SELECT COUNT(*) AS count FROM users WHERE user_id = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			ResultSet res = pStatement.executeQuery();
+			res.next();
+			if (res.getInt("count") > 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	/*
 	 * Register a new user
 	 */
 	public void addUser(String userid, String password, String firstname, String lastname) {
@@ -54,12 +81,13 @@ public class MySQLConnection {
 		}
 		
 		try {
-			String sql = "INSERT IGNORE INTO users(user_id,password,first_name,last_name,balance) VALUES(?,?,?,?,0)";
+			String sql = "INSERT INTO users(user_id,password,first_name,last_name,balance) VALUES(?,?,?,?,0)";
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			pStatement.setString(1, userid);
 			pStatement.setString(2, password);
 			pStatement.setString(3, firstname);
 			pStatement.setString(4, lastname);
+			System.out.println(pStatement.toString());
 			pStatement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
