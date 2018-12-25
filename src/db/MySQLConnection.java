@@ -3,6 +3,8 @@ package db;
 import java.sql.*;
 import java.util.*;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import db.MySQLDBUtil;
 import db.DataMock;
@@ -70,6 +72,61 @@ public class MySQLConnection {
 		}
 		
 		return false;
+	}
+	/*
+	 * Find Suggestions for Stock Symbols
+	 */
+	public JSONObject findSuggestions(String fragment) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return new JSONObject();
+		}
+		
+		try {
+			JSONObject res = new JSONObject();
+			String sql = "SELECT * FROM tickers WHERE symbol LIKE ? LIMIT 7";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			String part = "%" + fragment + "%";
+			pStatement.setString(1, part);
+			System.out.println(pStatement.toString());
+			System.out.println(fragment);
+			ResultSet rs = pStatement.executeQuery();
+			while(rs.next()) {
+				res.put(rs.getString("symbol"),rs.getString("name"));
+			}
+			
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new JSONObject();
+	}
+	/*
+	 * Find Actual Results from Stock Symbols
+	 */
+	public JSONObject findStock(String symbol) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return new JSONObject();
+		}
+		
+		try {
+			JSONObject res = new JSONObject();
+			String sql = "SELECT * FROM tickers WHERE symbol = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, symbol);
+			ResultSet rs = pStatement.executeQuery();
+			while(rs.next()) {
+				res.put(rs.getString("symbol"),rs.getString("name"));
+			}
+			
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new JSONObject();
 	}
 	/*
 	 * Register a new user

@@ -1,0 +1,36 @@
+#search-title{
+	text-align: center;
+}
+
+#search-suggestions{
+	background-color: #d37f73;
+	display: inline-block;
+}
+.suggestions-listing-ul{
+	margin: auto;
+	width: 15vw;
+}
+#search-form{
+	text-align: center;
+}
+
+#search-text-input{
+	width: 20vw;
+}
+
+#search-submit-button{
+	margin-top: 2vh;
+	width: 15vw;
+}
+
+.suggestion-item{
+	display:inline-block;
+	margin-top: 1.5vh;
+	margin-bottom: 1.5vh;
+	margin-right:3vw;
+}
+
+.suggestion-item :hover{
+	color: red;
+	cursor: pointer;
+}

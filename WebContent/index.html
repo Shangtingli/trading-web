@@ -12,6 +12,7 @@
 <script type="text/javascript" src = "scripts/default_watchlist.js"></script>
 <script type="text/javascript" src = "scripts/utils.js"></script>
 <script type="text/javascript" src = "scripts/charts.js"></script>
+<script type="text/javascript" src = "scripts/searchbar.js"></script>
 <script type="text/javascript" src = "scripts/main.js"></script>
 
 </head>
@@ -66,8 +67,14 @@
 		</div>
 		
 		<div class = "search-bar-container">
-			<p> Search A Stock</p>
-			
+			<p id = "search-title"> Search A Stock</p>
+			<form id = "search-form">
+				<input type = "text" id = "search-text-input">
+				<div id = "search-suggestions">
+					
+				</div>
+				<input type = "submit" value = "Add to WatchList" id = "search-submit-button">
+			</form>
 		</div>
 	</div>
 	
@@ -92,7 +99,9 @@
 
 <!-- //TODO:
 1. Implement WatchList Feature into the DataBase
+2. Implement the volume feature into database so that we could use suggestions according to volume
 3. Implement user defined WatchList on WatchList Column
 4. Implement the Chart on the front
 5. Implement features about refresh and stop
-6. Implement a set time interval featrue on the right of the website -->
+6. Implement a set time interval featrue on the right of the website
+7. Implement add to watchlist feature. -->

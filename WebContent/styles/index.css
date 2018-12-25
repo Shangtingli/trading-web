@@ -1,7 +1,10 @@
 @import 'topbar.css';
 @import 'footer.css';
 @import 'watchlist.css';
-
+@import 'searchbar.css';
+ul{
+	list-style-type: none;
+}
 body, html{
 	box-sizing: border-box;
 	margin: 0;
@@ -9,7 +12,7 @@ body, html{
 	background-color:black;
 }
 
-a ,p, span{
+a ,p, span, li{
 	color:white;
 }
 
@@ -23,12 +26,17 @@ button > span{
 
 .underlying-asset-chart-container{
 	border: 3px solid white;
-	width: 80vw;
+	width: 60vw;
 	height: 90vh;
 }
 
+.search-bar-container{
+	border: 3px solid white;
+	width: 30vw;
+	height: 90vh;
+}
 #underlying-asset-chart{
-	width: 70vw;
+	width: 50vw;
 	height: 80vh;
 }
 #chart-intro{

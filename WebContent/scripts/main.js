@@ -11,6 +11,7 @@
 		login_btn.addEventListener('click',showLoginPopUp);
 		logout_btn.addEventListener('click',destroyLogin);
 		initBalanceChart();
+		initSearchBar();
 		first_call_loadDefaultWatchList();
 		var time = undefined;
 		if (time !== undefined)

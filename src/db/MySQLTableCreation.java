@@ -17,17 +17,20 @@ public class MySQLTableCreation {
 				System.out.println("Connection on SQL is null");
 				return;
 			}
-			
 			Statement statement = conn.createStatement();
 			String sql = "DROP TABLE IF EXISTS log";
 			statement.executeUpdate(sql);
 			
-
-			sql = "DROP TABLE IF EXISTS stocks";
+			sql = "DROP TABLE IF EXISTS watchlists";
 			statement.executeUpdate(sql);
 			
+			sql = "DROP TABLE IF EXISTS stocks";
+			statement.executeUpdate(sql);
+ 
 			sql = "DROP TABLE IF EXISTS users";
 			statement.executeUpdate(sql);
+			
+//			Runtime.getRuntime().exec("/usr/local/bin/python3 ./StockDataCreation/stockDataCreation.py");
 			
 			sql = "CREATE TABLE users ("
 					+ "user_id VARCHAR(255) NOT NULL,"
@@ -62,10 +65,17 @@ public class MySQLTableCreation {
 					+ "PRIMARY KEY (action_id),"
 					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
 					+ ")";
-//			System.out.println(sql);
 			statement.executeUpdate(sql);
 			
-			System.out.println("MySQL Table Creation Complete");
+			sql = "CREATE TABLE watchlists ("
+					+ "user_id VARCHAR(255) NOT NULL,"
+					+ "symbol VARCHAR (255) NOT NULL,"
+					+ "PRIMARY KEY (user_id,symbol),"
+					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
+					+ ")";
+			statement.executeUpdate(sql);
+			
+			System.out.println("DataBase Creation Complete");
 		}
 		
 		catch (Exception e){
