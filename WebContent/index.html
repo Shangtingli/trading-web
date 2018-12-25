@@ -3,33 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Trading WebTech</title>
-<link rel="stylesheet" href="./index.css">
+<link rel="stylesheet" href="styles/index.css">
+<link rel="stylesheet" href="styles/topbar.css">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<script type="text/javascript" src = "scripts/default_watchlist.js"></script>
+<script type="text/javascript" src = "scripts/utils.js"></script>
+<script type="text/javascript" src = "scripts/charts.js"></script>
+<script type="text/javascript" src = "scripts/main.js"></script>
 
 </head>
 <body>
 	<nav class = "topbar-container">
 		<div id = "website-name">
-			<img src = "./WebContent/WEB-INF/assets/icon.svg">
+			<img id = "website-icon" src = "assets/icon.png">
 			<span>Trading WebTech</span>
 		</div>
 		
-		<div class = "topbar-options">
+		<div class = "topbar-options" id = "login-button">
 			<a href = "">Login</a>
 		</div>
 		
-		<div class = "topbar-options">
+		<div class = "topbar-options" id = "register-button">
 			<a href = "">Register</a>
 		</div>
 	</nav>
 	
 	<div class = "main-block">
-		<div class = "watchlist-container">
+		<div id = "watchlist-container">
 			<div id = "watchlist-no-login">
 				You must log in to see customized watchlist.
 			</div>
 			
 			<div id = "watchlist-login">
-				Content when you are signed in.
+				
 			</div>
 		</div>
 		
@@ -37,10 +47,27 @@
 			<p id = "chart-intro">
 				Trying your best to get the most underlying assets you get
 			</p>
-			<div class = "underlying-asset-chart">
+			<div id = "underlying-asset-chart">
 				There should be a chart here
 			</div>
 		</div>
 	</div>
+	
+	<footer>
+    <ul>
+      <li>
+        <p><i class="fa fa-map-o fa-2x"></i></p>
+        <p>2595 South Hoover Street</p>
+      </li>
+      <li>
+        <p><i class="fa fa-envelope-o fa-2x"></i></p>
+        <p>shangtingli@outlook.com</p>
+      </li>
+      <li>
+        <p><i class="fa fa-phone fa-2x"></i></p>
+        <p>217-402-4361</p>
+      </li>
+    </ul>
+  </footer>
 </body>
 </html>

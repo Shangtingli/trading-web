@@ -14,7 +14,16 @@ import entity.Item;
 import java.util.*;
 import external.AlphaVantageAPIUtil;
 import entity.Item.ItemBuilder;
-
+//class MyJSONComparator implements Comparator<JSONObject> {
+//
+//@Override
+//public int compare(JSONObject o1, JSONObject o2) {
+//    String v1 = (String) ((JSONObject) o1.get("attributes")).get("COMMERCIALNAME_E");
+//    String v3 = (String) ((JSONObject) o2.get("attributes")).get("COMMERCIALNAME_E");
+//    return v1.compareTo(v3);
+//}
+//
+//}
 public class AlphaVantageAPI {
 	private static final String URL = "https://www.alphavantage.co/query?";
 	private static final String API_KEY =  "IJ02XXB3R3J8DSDZ";
@@ -58,7 +67,6 @@ public class AlphaVantageAPI {
 			if (!obj.isNull(metaKey))
 			{
 				JSONObject timeSeries = obj.getJSONObject(metaKey);
-//				System.out.println(timeSeries);
 				return timeSeries;
 			}
 		}

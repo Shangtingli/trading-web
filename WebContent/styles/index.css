@@ -1,0 +1,44 @@
+@import 'topbar.css';
+@import 'footer.css';
+
+body, html{
+	display:block;
+	margin:0;
+	background-color:black;
+	padding:0;
+}
+a ,p, span{
+	color:white;
+}
+
+.main-block{
+	display:flex;
+}
+#watchlist-container{
+	width: 30vw;
+	height: 90vh;
+	border: 3px solid white;
+}
+
+#watchlist-login{
+	display:block;
+}
+
+#watchlist-no-login{
+	display:none;
+}
+.underlying-asset-chart-container{
+	border: 3px solid white;
+	width: 70vw;
+	height: 90vh;
+}
+
+#underlying-asset-chart{
+	width: 70vw;
+	height: 80vh;
+}
+#chart-intro{
+	font-weight: 700;
+	font-size: 3vh;
+	margin: auto;
+}
