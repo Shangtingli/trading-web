@@ -1,0 +1,46 @@
+#watchlist-container{
+	width: 20vw;
+	height: 90vh;
+	border: 3px solid white;
+}
+
+#watchlist-login-prompt{
+	display:none;
+}
+
+#watchlist-login{
+	display:block;
+}
+
+#watchlist-title{
+	text-align: center;
+	margin:auto;
+	font-family: Arial;
+	font-weight: 700;
+}
+
+.watchlist-item{
+	height: 10vh;
+	width: 15vw;
+}
+
+.trend-icon{
+	width: 3vw;
+	height: 3vw;
+	margin-top: 2vh;
+}
+
+.watchlist-item-container{
+	display:flex;
+	border: 1px solid white;
+}
+
+.asset-name{
+	font-weight: 700;
+	font-family:  "Times New Roman", Times, serif;
+	margin-left: 1vw;
+}
+.asset-price{
+	font-family: "Times New Roman", Times, serif;
+	margin-left: 1vw;
+}

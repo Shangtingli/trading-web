@@ -15,6 +15,7 @@
     }
 	
 	function showElement(element){
+		console.log(element);
         element.style.display = 'block';
         console.log(element.style.display);
     }

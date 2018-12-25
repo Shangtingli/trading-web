@@ -1,6 +1,6 @@
     function loadDefaultWatchList(){
     	var params = '';
-    	showLoading('Loading WatchList');
+    	showLoading('Refreshing WatchList');
     	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
     		var assetlabel = 'asset' + i.toString() + '=';
     		if (i != DEFAULT_WATCHLIST.length - 1)
@@ -16,7 +16,6 @@
         var url = './price';
 
         var req = JSON.stringify({});
-        debugger;
         // make AJAX call
         ajax(
            'GET',
@@ -24,7 +23,6 @@
              req,
            // successful callback
            function(res) {
-             debugger;
              var result = JSON.parse(res);
          	 showPrice(result);
            },
@@ -58,20 +56,45 @@
 	    		var layout = {};
 
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
-    }
+	}
 	
 	function showPrice(results) {
 		element = $('watchlist-login');
 		element.innerHTML = '';
 		for (var res of results){
+			var container = $('div',{
+				className :'watchlist-item-container'
+			});
+			var trend = res.trend;
 			var asset = res.asset;
 			var price = res.price;
 			var text = $('p', {
 	            className: 'watchlist-item'
 	        });
-			text.innerHTML = asset + '\n' + price;
-			element.appendChild(text);
+			if (trend === 'up'){
+				var trend_icon = $('img',{
+					className: "trend-icon",
+					src: 'assets/uparrow.png'
+				});
+			}
+			else if (trend === 'down'){
+				var trend_icon = $('img',{
+					className: "trend-icon",
+					src: 'assets/downarrow.png'
+				});
+			}
+			else{
+				var trend_icon = $('img',{
+					className: "trend-icon",
+					src: 'assets/circle.png'
+				});
+			}
+			text.innerHTML = '<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>'
+			container.appendChild(text);
+			container.appendChild(trend_icon);
+			element.appendChild(container);
 		}
+		showElement($('watchlist-login-prompt'));
 	}
 	
 	function showLoading(msg){
@@ -83,5 +106,4 @@
         msg + '</p>'
 		
 		element.appendChild(blk);
-		debugger;
 	}

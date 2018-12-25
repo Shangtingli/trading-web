@@ -46,11 +46,23 @@ public class Price extends HttpServlet {
 				JSONObject obj = new JSONObject();
 				if (items.size() > 0) {
 					double price = items.get(items.size()-1).getOpen();
+					double initPrice = items.get(0).getOpen();
 		   			obj.put("asset",asset).put("price", Double.toString(price));
+		   			double diff = price-initPrice;
+		   			if (Math.abs(diff) < 0.001) {
+		   				obj.put("trend", "neutral");
+		   			}
+		   			else if (diff > 0) {
+		   				obj.put("trend", "up");
+		   			}
+		   			else if (diff < 0) {
+		   				obj.put("trend", "down");
+		   			}
 		   			arr.put(obj);
+		   			
 				}
 				else {
-					obj.put("asset", asset).put("price", "N/A");
+					obj.put("asset", asset).put("price", "N/A").put("trend", "none");
 					arr.put(obj);
 				}
 			}

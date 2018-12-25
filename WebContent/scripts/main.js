@@ -1,7 +1,7 @@
 (function(){	
 	function init(){
-		var register_btn = $("register-button");
-		var login_btn = $("login-button");
+		var register_btn = $("register-btn");
+		var login_btn = $("login-btn");
 		register_btn.addEventListener('click',showRegisterPopUp);
 		login_btn.addEventListener('click',showLoginPopUp);
 		initBalanceChart();

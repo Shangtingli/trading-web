@@ -1,35 +1,29 @@
 @import 'topbar.css';
 @import 'footer.css';
+@import 'watchlist.css';
 
 body, html{
-	display:block;
-	margin:0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 	background-color:black;
-	padding:0;
 }
+
 a ,p, span{
 	color:white;
+}
+
+button > span{
+	color:black;
 }
 
 .main-block{
 	display:flex;
 }
-#watchlist-container{
-	width: 30vw;
-	height: 90vh;
-	border: 3px solid white;
-}
 
-#watchlist-login{
-	display:block;
-}
-
-#watchlist-no-login{
-	display:none;
-}
 .underlying-asset-chart-container{
 	border: 3px solid white;
-	width: 70vw;
+	width: 80vw;
 	height: 90vh;
 }
 
