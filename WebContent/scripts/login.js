@@ -19,14 +19,17 @@
 			var result = JSON.parse(res);
 
 			// successfully logged in
-			if (result.result === 'SUCCESS') {
-				onSessionValid(result);
+			if (result.result === 'success') {
+				console.log("SUCCESS");
+				window.close();
+			}
+			else{
+				console.log("Invalid Password");
 			}
 		},
 
 		// error
 		function() {
-			debugger;
 			console.log("Something is Wrong");
 		});
 	}
