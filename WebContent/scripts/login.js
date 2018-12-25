@@ -1,9 +1,13 @@
 (function(){	
-	function init(){
-		$("login-submit").addEventListener('click',login);
+	function init_login(){
+		$("login-submit").addEventListener('click',function(event){
+			event.preventDefault();
+			login();
+		});
 	}
     
 	function login() {
+//		event.preventDefault();
 		var username = $('login-username-input').value;
 		var password = $('login-password-input').value;
 
@@ -11,27 +15,33 @@
 		var url = '../login';
 		var params = 'userid=' + username + '&password=' + password;
 		var req = JSON.stringify({});
-		debugger;
 		ajax('GET', url + '?' + params, req,
 		// successful callback
 		function(res) {
-			debugger;
 			var result = JSON.parse(res);
 
 			// successfully logged in
-			if (result.result === 'success') {
-				console.log("SUCCESS");
-				window.close();
+			if (result.result == 'success') {
+				showElement($('login-success-notice'));
+				navBarOnLogin();
 			}
 			else{
-				console.log("Invalid Password");
+				showElement($('login-error-notice'));
 			}
 		},
 
 		// error
 		function() {
 			console.log("Something is Wrong");
+			debugger;
 		});
+		
 	}
-    window.onload = init;
+	
+	function navBarOnLogin(){
+		showElement(window.opener.document.getElementById('logout-button'));
+		showElement(window.opener.document.getElementById('welcome-message'));
+		hideElement(window.opener.document.getElementById('login-button'));
+	}
+    window.onload = init_login;
 })();

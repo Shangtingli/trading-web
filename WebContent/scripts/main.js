@@ -1,20 +1,24 @@
 (function(){	
 	function init(){
+		onLogout();
+	}
+    
+	function onLogout(){
 		var register_btn = $("register-btn");
 		var login_btn = $("login-btn");
 		register_btn.addEventListener('click',showRegisterPopUp);
 		login_btn.addEventListener('click',showLoginPopUp);
 		initBalanceChart();
-		initWatchList();
+		
 		first_call_loadDefaultWatchList();
 		var time = undefined;
 		if (time !== undefined)
 		{var timeInt = setInterval(loadDefaultWatchList,time*1000);}
 	}
-    
-    function initWatchList(){
-    	console.log(DEFAULT_WATCHLIST);
-    }
+	
+	function onLogin(){
+		
+	}
     window.onload = init;
 })();
 

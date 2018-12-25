@@ -28,3 +28,14 @@
 	width: 20px;
 	height: 20px
 }
+
+#welcome-message{
+	display: none;
+	float:right;
+	margin-right:1vw;
+	margin-top: 1vh;
+}
+
+#logout-button{
+	display:none;
+}

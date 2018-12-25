@@ -1,0 +1,19 @@
+body{
+	margin: 0;
+	padding:0;
+	background-color: black;
+}
+
+p, a, span {
+	color: white;
+}
+
+#login-error-notice{
+	display: none;
+	color: red;
+}
+
+#login-success-notice{
+	display: none;
+	color: yellow;
+}

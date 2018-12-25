@@ -3,22 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Trading Tech Login</title>
-<script type="text/javascript" src = "../scripts/login.js"></script>
 <script type="text/javascript" src = "../scripts/utils.js"></script>
+<script type="text/javascript" src = "../scripts/login.js"></script>
+<link rel="stylesheet" href="../styles/login.css">
 </head>
 <body>
 	<header>
-		<p> 
-			Trading WebTech Login Interface
+		<div id = "login-form-container">
+			<p> 
+				Trading WebTech Login Interface
+			</p>
+			
+			<form>
+				  <span> UserName: </span><br>
+				  <input type="text" id="login-username-input"><br><br>
+				  <span> PassWord:</span><br>
+				  <input type="text" id = "login-password-input"><br><br>
+				  <input type = "submit" id = "login-submit"> <br>
+			</form>
+			<p id = "login-error-notice">
+				Invalid UserName or Password
+			</p>
+		</div>
+		<p id = "login-success-notice">
+			Login Success! Returning to the parent page...
 		</p>
-		
-		<form>
-			  UserName:<br>
-			  <input type="text" id="login-username-input"><br>
-			  PassWord:<br>
-			  <input type="text" id = "login-password-input"><br><br>
-			  <input type="submit" id = "login-submit" value="Submit">
-		</form>
 	</header>
 </body>
 </html>
