@@ -1,6 +1,9 @@
 (function(){
 	function init_register(){
-		$('#register-submit').on('click',register);
+		$('#register-submit').on('click',function(e){
+			e.preventDefault();
+			register();
+		});
 	}
 	
 	function register(){

@@ -15,7 +15,6 @@
 		ajax('GET', url + '?' + params, req,
 		function(res) {
 			var result = JSON.parse(res);
-			debugger;
 			if (result.result == 'success') {
 				$('#username',window.opener.document).val(username).triggerHandler('change');
 				onLoginNavBar(result.user_id);
