@@ -353,6 +353,70 @@ public class MySQLConnection {
 		return false;
 	}
 	/*
+	 * Get Users WatchList
+	 */
+	public List<String> getWatchList(String userid) {
+		List<String> arr = new ArrayList<>();
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return arr;
+		}
+		try {
+			String sql = "SELECT symbol FROM watchlists where user_id = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			ResultSet res = pStatement.executeQuery();
+			while(res.next()) {
+				String symbol = res.getString("symbol");
+				arr.add(symbol);
+			}
+			return arr;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return arr;
+	}
+	/*
+	 * Set the symbol in user's watchLists
+	 */
+	public void setWatchList(String userid,String symbol) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return;
+		}
+		try {
+			String sql = "INSERT INTO watchlists(user_id,symbol) VALUES(?,?)";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			pStatement.setString(2, symbol);
+			pStatement.execute();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * UnSet the symbol in user's watchLists
+	 */
+	public void unSetWatchList(String userid,String symbol) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return;
+		}
+		try {
+			String sql = "DELETE FROM watchlists WHERE user_id = ? AND symbol = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			pStatement.setString(2, symbol);
+			pStatement.execute();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/*
 	 * MAIN
 	 */
 	public static void main(String[] args) {
@@ -370,11 +434,19 @@ public class MySQLConnection {
 		for (int i = 0; i < DataMock.MOCK_LST_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_ACTIONS[i], DataMock.MOCK_LST_AMOUNTS[i], DataMock.MOCK_LST_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
 		}
+		
+		for (int i = 0; i < DataMock.MOCK_LST_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_WATCHLIST[i]);
+		}
 		/*
 		 * WYY
 		 */
 		for (int i = 0; i < DataMock.MOCK_WYY_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[1], DataMock.MOCK_WYY_ACTIONS[i], DataMock.MOCK_WYY_AMOUNTS[i], DataMock.MOCK_WYY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		
+		for (int i = 0; i < DataMock.MOCK_WYY_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[1], DataMock.MOCK_WYY_WATCHLIST[i]);
 		}
 		/*
 		 * AWD
@@ -382,11 +454,19 @@ public class MySQLConnection {
 		for (int i = 0; i < DataMock.MOCK_AWD_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[2], DataMock.MOCK_AWD_ACTIONS[i], DataMock.MOCK_AWD_AMOUNTS[i], DataMock.MOCK_AWD_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
 		}
+		
+		for (int i = 0; i < DataMock.MOCK_AWD_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[2], DataMock.MOCK_AWD_WATCHLIST[i]);
+		}
 		/*
 		 * CXY
 		 */
 		for (int i = 0; i < DataMock.MOCK_CXY_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[3], DataMock.MOCK_CXY_ACTIONS[i], DataMock.MOCK_CXY_AMOUNTS[i], DataMock.MOCK_CXY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		
+		for (int i = 0; i < DataMock.MOCK_CXY_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[3], DataMock.MOCK_CXY_WATCHLIST[i]);
 		}
 		/*
 		 * YZY
@@ -394,11 +474,19 @@ public class MySQLConnection {
 		for (int i = 0; i < DataMock.MOCK_YZY_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[4], DataMock.MOCK_YZY_ACTIONS[i], DataMock.MOCK_YZY_AMOUNTS[i], DataMock.MOCK_YZY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
 		}
+		
+		for (int i = 0; i < DataMock.MOCK_YZY_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[4], DataMock.MOCK_YZY_WATCHLIST[i]);
+		}
 		/*
 		 * ZSJ
 		 */
 		for (int i = 0; i < DataMock.MOCK_ZSJ_ACTIONS.length; i++) {
 			conn.submitAction(DataMock.MOCK_USER_NAMES[5], DataMock.MOCK_ZSJ_ACTIONS[i], DataMock.MOCK_ZSJ_AMOUNTS[i], DataMock.MOCK_ZSJ_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+		}
+		
+		for (int i = 0; i < DataMock.MOCK_ZSJ_WATCHLIST.length; i++) {
+			conn.setWatchList(DataMock.MOCK_USER_NAMES[5], DataMock.MOCK_ZSJ_WATCHLIST[i]);
 		}
 		
 		/**

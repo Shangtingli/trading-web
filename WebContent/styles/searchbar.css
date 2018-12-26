@@ -1,5 +1,6 @@
 #search-title{
 	text-align: center;
+	display: none;
 }
 
 #search-suggestions{
@@ -11,6 +12,7 @@
 	width: 15vw;
 }
 #search-form{
+	display: none;
 	text-align: center;
 }
 

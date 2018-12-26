@@ -18,10 +18,6 @@
 		{var timeInt = setInterval(loadDefaultWatchList,time*1000);}
 	}
 	
-	function onLogin(){
-		
-	}
-	
 	function destroyLogin(){
 		showElement($('login-button'));
 		hideElement($('logout-button'));

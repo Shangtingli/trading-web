@@ -1,12 +1,6 @@
     function first_call_loadDefaultWatchList(){
-    	loadDefaultWatchList();
-    }
-    
-	function loadDefaultWatchList(){
-    	var params = '';
-    	var element = $('watchlist-login');
-    	element.innerHTML = '';
-    	showLoading('Refreshing WatchList');
+    	var url = './price';
+    	var params = 'userid=' + 'none' + '&';
     	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
     		var assetlabel = 'asset' + i.toString() + '=';
     		if (i != DEFAULT_WATCHLIST.length - 1)
@@ -17,7 +11,12 @@
     			params += assetlabel + DEFAULT_WATCHLIST[i];
     		}
     	}
-        var url = './price';
+    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),url,params);
+    }
+    
+	function loadDefaultWatchList(renderElement,loadingElement,promptElement, url, params){
+    	renderElement.innerHTML = '';
+    	showLoading('Refreshing WatchList',loadingElement);
 
         var req = JSON.stringify({});
         // make AJAX call
@@ -28,7 +27,7 @@
            // successful callback
            function(res) {
              var result = JSON.parse(res);
-         	 showPrice(result);
+         	 showPrice(result,renderElement,promptElement);
            },
            // failed callback
            function() {
@@ -63,9 +62,8 @@
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
 	}
 	
-	function showPrice(results) {
-		element = $('watchlist-login');
-		element.innerHTML = '';
+	function showPrice(results,renderElement,promptElement) {
+		renderElement.innerHTML = '';
 		for (var res of results){
 			var container = $('div',{
 				className :'watchlist-item-container'
@@ -97,18 +95,17 @@
 			text.innerHTML = '<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>'
 			container.appendChild(text);
 			container.appendChild(trend_icon);
-			element.appendChild(container);
+			renderElement.appendChild(container);
 		}
-		showElement($('watchlist-login-prompt'));
+		showElement(promptElement);
 	}
 	
-	function showLoading(msg){
-		element = $('watchlist-login');
+	function showLoading(msg,loadingElement){
 		var blk = $('div', {
 			className: 'loading-container'
 		});
 		blk.innerHTML = '<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
         msg + '</p>'
 		
-		element.appendChild(blk);
+		loadingElement.appendChild(blk);
 	}

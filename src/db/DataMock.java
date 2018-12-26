@@ -65,6 +65,18 @@ public class DataMock {
 	public static final String[] MOCK_ZSJ_ACTION_SYMBOLS = new String[]
 	{"TWTR"};
 	
+	public static final String[] MOCK_LST_WATCHLIST = new String[]
+	{"AAPL","MSFT","TSLA","GPRO"};
+	public static final String[] MOCK_WYY_WATCHLIST = new String[]
+	{};
+	public static final String[] MOCK_AWD_WATCHLIST = new String[]
+	{"AMAZ","DIS","FB"};
+	public static final String[] MOCK_CXY_WATCHLIST = new String[]
+	{"BABA"};
+	public static final String[] MOCK_YZY_WATCHLIST = new String[]
+	{"NFLX","SIRI"};
+	public static final String[] MOCK_ZSJ_WATCHLIST = new String[]
+	{"TWTR"};
 	public static final double MOCK_PRICE = 1;
 	
 

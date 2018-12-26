@@ -44,10 +44,10 @@
                 directories=no,status=yes');
     }
     
-    function ajax(method, url, data, callback, errorHandler) {
+    function ajax(method, url, data, callback, errorHandler, async = true) {
         var xhr = new XMLHttpRequest();
 
-        xhr.open(method, url, true);
+        xhr.open(method, url, async);
 
         xhr.onload = function() {
 			if (xhr.status === 200) {
