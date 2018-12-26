@@ -1,48 +1,48 @@
     function first_call_loadDefaultWatchList(){
-    	var url = './price';
-    	loadDefaultWatchList(true);
+    	loadDefaultWatchList();
     }
     
-//	function loadDefaultWatchList(renderElement,loadingElement,promptElement, refElement,url){
     function loadDefaultWatchList(){
-    	var renderElement = (parentPage) ? ($('#watchlist-login')): ($("#watchlist-login",window.opener.document));
-    	var refElement = (parentPage) ? ($('username')): ($('username',window.opener.document));
-    	var promptElement = (parentPage) ? ($('#watchlist-login-prompt')): ($('#watchlist-login-prompt',window.opener.document));
-    	var url = (parentPage) ? ('./price') : ('../price');
-		renderElement.innerHTML = '';
+    	var renderElement = $('#watchlist-login');
+    	var refElement = $('#username');
+    	var promptElement = $('#watchlist-login-prompt');
+    	var url = './price';
+		renderElement.html('');
     	var params = constructParams(refElement);
     	showLoading('Refreshing WatchList',renderElement);
     	var userid = refElement.val();
     	var showButtons = (userid.length > 0);
         var req = JSON.stringify({});
+        var query = url + '?' + params;
+        console.log(query);
         // make AJAX call
         ajax(
            'GET',
-           url + '?' + params,
+           	query,
              req,
            // successful callback
            function(res) {
              var result = JSON.parse(res);
-         	 showPrice(result,renderElement,promptElement,showButtons,parentPage);
-         	 addRemoveListeners(parentPage);
+         	 showPrice(result,renderElement,promptElement,showButtons);
+         	 addRemoveListeners();
+             var userid = refElement.val();
+             if (userid.length > 0){
+             	hideElement(promptElement);
+             }
+             else{
+             	showElement(promptElement);
+             }
            },
            // failed callback
            function() {
               console.log("Loading Default WatchList is Not Successful");
         });
-        var userid = refElement.val();
-        if (userid.length > 0){
-        	hideElement(promptElement);
-        }
-        else{
-        	showElement(promptElement);
-        }
         
     }
 	
 	function removeFromWatchList(asset){
-		var dummyObject = $('dummy');
-		var userid = dummyObject.innerHTML;
+		var userObj = $('#username');
+		var userid = userObj.val();
 		var url = './watchlist';
 		var params = 'method=' + 'remove&' + 'userid=' + userid + '&symbol=' + asset;
 		var target_id = 'watchlist-item-button-container-' + asset;
@@ -50,12 +50,12 @@
 		ajax('POST', url + '?' + params, req,
 				function(res) {
 					var result = JSON.parse(res);
-					$(target_id).remove();
+					$('#'+target_id).remove();
 				},
 				function() {
 					console.log("Something is Wrong");
 				},false);
-		loadDefaultWatchList(true);
+		loadDefaultWatchList();
 	}
 	
 	function initBalanceChart(){
@@ -84,100 +84,64 @@
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
 	}
 	
-	function showPrice(results,renderElement,promptElement,showButtons,parentPage) {
+	function showPrice(results,renderElement,promptElement,showButtons) {
 		renderElement.html('');
 		for (var res of results){
-			var container = (parentPage) ? 
-			$('div',{
-				className :'watchlist-item-container'
-			}) : $$('div',{
-				className :'watchlist-item-container'
-			})
-			;
+			var container = $('<div></div>');
+			container.attr('class', 'watchlist-item-container');
 			var trend = res.trend;
 			var asset = res.asset;
 			var price = res.price;
-			var text = (parentPage) ? 
-			$('p', {
-	            className: 'watchlist-item'
-	        }) : $$('p', {
-	            className: 'watchlist-item'
-	        }) ;
+			var text = $('<p></p>');
+			text.attr('class','watchlist-item');
 			if (trend === 'up'){
-				var trend_icon = (parentPage)?$('img',{
-					className: "trend-icon",
-					src: 'assets/uparrow.png'
-				}) : $$('img',{
-					className: "trend-icon",
-					src: 'assets/uparrow.png'
-				});
+				var trend_icon = $('<img src= "assets/uparrow.png">');
+				trend_icon.attr('class','trend-icon');
 			}
 			else if (trend === 'down'){
-				var trend_icon = (parentPage)?$('img',{
-					className: "trend-icon",
-					src: 'assets/downarrow.png'
-				}) : $$('img',{
-					className: "trend-icon",
-					src: 'assets/downarrow.png'
-				});
+				var trend_icon = $('<img src= "assets/downarrow.png">');
+				trend_icon.attr('class','trend-icon');
 			}
 			else{
-				var trend_icon = (parentPage)?$('img',{
-					className: "trend-icon",
-					src: 'assets/circle.png'
-				}) : $$('img',{
-					className: "trend-icon",
-					src: 'assets/circle.png'
-				});
+				var trend_icon = $('<img src="assets/circle.png">');
+				trend_icon.attr('class','trend-icon');
 			}
-			text.innerHTML = '<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>'
-			container.appendChild(text);
-			container.appendChild(trend_icon);
+			text.html('<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>');
+			container.append(text);
+			container.append(trend_icon);
 			
-			var btn_container = (parentPage) ? $('div', {
-	            className: 'watchlist-item-button-container',
-	        }) : $$('div', {
-	            className: 'watchlist-item-button-container',
-	        }); 
-			var rm_btn = (parentPage)?$('button', {
-	            className: 'remove-from-watchlist-button',
-	        }) : $$('button', {
-	            className: 'remove-from-watchlist-button',
-	        });
-			rm_btn.innerHTML = 'Remove';
-			rm_btn.setAttribute('id','remove-from-watchlist-button-' + asset);
-			btn_container.appendChild(rm_btn);
-			btn_container.setAttribute('id','watchlist-item-button-container-' + asset);
-			btn_container.style.display = (showButtons) ? ("block"):("none");
-			container.appendChild(btn_container);
-			renderElement.appendChild(container);
+			var btn_container = $('<div></div>');
+			btn_container.attr('class','watchlist-item-button-container');
+			var rm_btn = $('<button></button>');
+			rm_btn.attr('class','remove-from-watchlist-button');
+			rm_btn.html('Remove');
+			rm_btn.attr('id','remove-from-watchlist-button-' + asset);
+			btn_container.append(rm_btn);
+			btn_container.attr('id','watchlist-item-button-container-' + asset);
+			btn_container.css("display",(showButtons) ? ("block"):("none"));
+			container.append(btn_container);
+			renderElement.append(container);
 		}
 	}
 	
 	function showLoading(msg,loadingElement){
-		var blk = $('div', {
-			className: 'loading-container'
-		});
-		blk.innerHTML = '<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
-        msg + '</p>'
+		var blk = $('<div></div>');
+		blk.attr('class','loading-container');
+		blk.html('<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
+        msg + '</p>');
 		
-		loadingElement.appendChild(blk);
+		loadingElement.append(blk);
 	}
 	
-	function addRemoveListeners(parentPage){
-		var elements = (parentPage) ? 
-				(document.getElementsByClassName('remove-from-watchlist-button')):
-					(window.opener.document.getElementsByClassName('remove-from-watchlist-button'));
-		for (var ele of elements){
-			ele.addEventListener('click',function(e){
-				debugger;
-				var asset = e.target.id.replace(e.target.className + '-', '');
-				e.preventDefault();
-				removeFromWatchList(asset);
-			});
-		}
+	function addRemoveListeners(){
+		var elements = $('.remove-from-watchlist-button');
+		elements.on('click',function(e){
+			e.preventDefault();
+			var asset = e.target.id.replace(e.target.className + '-', '');
+			removeFromWatchList(asset);
+		})
 	}
 	
-	function myFunction(){
-		alert("hello");
+	function onChangeUserId(){
+		loadDefaultWatchList();
 	}

@@ -1,9 +1,14 @@
 function initSearchBar(){
 	var text_input = $('#search-text-input');
-	text_input.on('input',findSuggestions);
+	text_input.on('input',function(e){
+		e.preventDefault();
+		findSuggestions();
+	});
 	var search_submit = $('#search-submit-button');
-	debugger;
-	search_submit.on('click',addtoWatchList);
+	search_submit.on('click',function(e){
+		e.preventDefault();
+		addtoWatchList();
+	});
 }
 
 function addtoWatchList(){
@@ -14,18 +19,17 @@ function addtoWatchList(){
 	var req = JSON.stringify({});
 	var success = false;
 	$('#search-text-input').val('');
-	debugger;
 	ajax('POST', url + '?' + params, req,
 			// successful callback
 			function(res) {
 				var result = JSON.parse(res);
 				if (result.result === 'failed'){
 					console.log("Failed");
-					showElement($('ticker-exist-notice'));
+					showElement($('#ticker-exist-notice'));
 				}
 				else{
 					success = true;
-					hideElement($('ticker-exist-notice'));
+					hideElement($('#ticker-exist-notice'));
 				}
 			},
 
@@ -35,15 +39,14 @@ function addtoWatchList(){
 			},false);
 	if (success)
 	{
-		var url = './price';
-		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
+		loadDefaultWatchList();
 	}
 }
 
 function findSuggestions(){
-	var input_val =$('search-text-input').value;
-	if (input_val.length ===0){
-		$('search-suggestions').innerHTML = '';
+	var input_val =$('#search-text-input').val();
+	if (input_val.length === 0){
+		$('#search-suggestions').html('');
 		return;
 	}
 	var url = './suggestion';
@@ -63,31 +66,28 @@ function findSuggestions(){
 }
 
 function showSuggestions(result){
-	var sug_blk = $('search-suggestions');
-	sug_blk.innerHTML = '';
+	var sug_blk = $('#search-suggestions');
+	sug_blk.html('');
 	var keys = Object.keys(result);
-	var sugUl = $('ul',{
-		className: 'suggestions-listing-ul'
-	});
+	var sugUl = $('<ul></ul>');
+	sugUl.attr('class','suggestions-listing-ul');
 	for(var i=0;i<keys.length;i++){
 	    var symbol = keys[i];
 	    var name = result[symbol];
-	    var sugLi = $('li',{
-	    	className: 'suggestion-item'
-	    });
-	    sugLi.innerHTML = '<span>' + symbol+ ' : ' + name + '</span>';
-	    sugUl.appendChild(sugLi);
+		var sugLi = $('<li></li>');
+		sugLi.attr('class','suggestion-item');
+		sugLi.html('<span>' + symbol+ ' : ' + name + '</span>');
+	    sugUl.append(sugLi);
 	}
 	
-	sug_blk.appendChild(sugUl);
-	var eles = document.getElementsByClassName('suggestion-item');
-	for (var ele of eles){
-		ele.addEventListener('click',function(e){
-			e.preventDefault();
-			var symbol = e.target.innerText.split(':')[0].trim();
-			$('search-suggestions').innerHTML = '';
-			$('search-text-input').value = symbol
-		});
-	}
+	sug_blk.append(sugUl);
+	var eles = $('.suggestion-item');
+	eles.on('click',function(e){
+		e.preventDefault();
+		var symbol = e.target.innerText.split(':')[0].trim();
+		$('#search-suggestions').html('');
+		$('#search-text-input').val(symbol);
+	});
+
 }
 

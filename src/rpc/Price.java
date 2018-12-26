@@ -36,8 +36,8 @@ public class Price extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user = request.getParameter("userid");
-		System.out.println(user);
-		if (user.equals("none"))
+		System.out.println(user.equals(""));
+		if (user.equals(""))
 		{
 			noLoginMode(request, response);
 		}
@@ -61,7 +61,6 @@ public class Price extends HttpServlet {
 			AlphaVantageAPI api = new AlphaVantageAPI();
 			Map<String,String[]> assets = request.getParameterMap();
 			for (Map.Entry<String, String[]> entry : assets.entrySet()) {
-				System.out.println("The Key is :" + entry.getKey());
 				if (entry.getKey().equals("userid")) {
 					continue;
 				}

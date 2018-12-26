@@ -1,2 +1,5 @@
 1. The WatchList Could only be Removed when you add at least one item to the watch list
 	(OnChange might fix the problem)
+	(Solved: Using JQuery Instead)
+2. The ajax webpage calls itself
+	(Solved: make sure you add e.preventDefault() at every listener event)

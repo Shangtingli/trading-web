@@ -1,7 +1,7 @@
 (function(){	
 	function init_login(){
-		$("#login-submit").on('click',function(event){
-			event.preventDefault();
+		$("#login-submit").on('click',function(e){
+			e.preventDefault();
 			login();
 		});
 	}
@@ -15,23 +15,23 @@
 		ajax('GET', url + '?' + params, req,
 		function(res) {
 			var result = JSON.parse(res);
+			debugger;
 			if (result.result == 'success') {
-				debugger;
 				$('#username',window.opener.document).val(username).triggerHandler('change');
 				onLoginNavBar(result.user_id);
-//				onSearchBar();
-//				onWatchList();
+				onSearchBar();
+				onWatchList();
 				setTimeout(window.close,2000);
 			}
 			else{
-				showElement($('login-error-notice'));
+				showElement($('#login-error-notice'));
 			}
 		},
 		// error
 		function() {
 			console.log("Something is Wrong");
 		}, false);
-		if ($('#username').val().length === 0){
+		if ($('#username',window.opener.document).val().length === 0){
 			return;
 		}
 		url = '../price';

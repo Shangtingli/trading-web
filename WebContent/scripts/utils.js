@@ -91,9 +91,9 @@
     }
     
     function constructParams(refElement){
-    	var userid = refElement.innerHTML;
-    	if (userid === 'none'){
-	    	var params = 'userid=' + 'none' + '&';
+    	var userid = refElement.val();
+    	if (userid.length === 0){
+	    	var params = 'userid=' + '&';
 	    	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
 	    		var assetlabel = 'asset' + i.toString() + '=';
 	    		if (i != DEFAULT_WATCHLIST.length - 1)
