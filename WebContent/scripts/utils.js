@@ -74,5 +74,26 @@
         }
     }
     
+    function constructParams(refElement){
+    	var userid = refElement.innerHTML;
+    	if (userid === 'none'){
+	    	var params = 'userid=' + 'none' + '&';
+	    	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
+	    		var assetlabel = 'asset' + i.toString() + '=';
+	    		if (i != DEFAULT_WATCHLIST.length - 1)
+	    		{
+	    			params += assetlabel + DEFAULT_WATCHLIST[i] + '&';
+	    		}
+	    		else{
+	    			params += assetlabel + DEFAULT_WATCHLIST[i];
+	    		}
+	    	}
+    	}
+    	
+    	else{
+    		var params = 'userid=' + userid;
+    	}
+    	return params;
+    }
     
    

@@ -88,8 +88,6 @@ public class MySQLConnection {
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			String part = "%" + fragment + "%";
 			pStatement.setString(1, part);
-			System.out.println(pStatement.toString());
-			System.out.println(fragment);
 			ResultSet rs = pStatement.executeQuery();
 			while(rs.next()) {
 				res.put(rs.getString("symbol"),rs.getString("name"));
@@ -144,7 +142,6 @@ public class MySQLConnection {
 			pStatement.setString(2, password);
 			pStatement.setString(3, firstname);
 			pStatement.setString(4, lastname);
-			System.out.println(pStatement.toString());
 			pStatement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -215,7 +212,6 @@ public class MySQLConnection {
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			pStatement.setString(1, userid);
 			pStatement.setString(2, symbol);
-			System.out.println(pStatement.toString());
 			ResultSet rs = pStatement.executeQuery();
 			if (rs.next())
 			{return rs.getDouble("position");}
@@ -395,6 +391,32 @@ public class MySQLConnection {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	/*
+	 * Check to see if the user already have the ticker on watchlist
+	 */
+	public boolean isExistedWatchList(String userid, String symbol) {
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return false;
+		}
+		try {
+			String sql = "SELECT COUNT(*) AS count FROM watchlists WHERE user_id = ? AND symbol = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			pStatement.setString(2, symbol);
+			System.out.println(pStatement.toString());
+			ResultSet rs = pStatement.executeQuery();
+			while(rs.next()) {
+				return (rs.getInt("count") > 0); 
+					
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	/*

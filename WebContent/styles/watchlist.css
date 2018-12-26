@@ -5,7 +5,7 @@
 }
 
 #watchlist-login-prompt{
-	display:none;
+	display:block;
 }
 
 #watchlist-login{
@@ -48,6 +48,15 @@
 
 .remove-from-watchlist-button{
 	width: 8vw;
-	height: 4vh;
-	margin: 4vh 0 auto auto;
+	height: 2vh;
 }
+
+.add-to-watchlist-button{
+	width: 8vw;
+	height: 2vh;
+}
+
+.watchlist-item-button-container{
+	margin-top: 2vh;
+}
+

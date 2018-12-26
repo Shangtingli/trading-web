@@ -1,7 +1,47 @@
 function initSearchBar(){
 	var text_input = $('search-text-input');
-	text_input.addEventListener('input',findSuggestions)
+	text_input.addEventListener('input',findSuggestions);
+	var search_submit = $('search-submit-button');
+	search_submit.addEventListener('click',function(e){
+		e.preventDefault();
+		addtoWatchList();
+	});
 }
+
+function addtoWatchList(){
+	var userid = $('dummy').innerHTML;
+	var symbol = $('search-text-input').value;
+	var url = './watchlist';
+	var params = 'method=' + 'add&' + 'userid=' + userid + '&symbol=' + symbol;
+	var req = JSON.stringify({});
+	var success = false;
+	$('search-text-input').value = '';
+	ajax('POST', url + '?' + params, req,
+			// successful callback
+			function(res) {
+				var result = JSON.parse(res);
+				if (result.result === 'failed'){
+					console.log("Failed");
+					showElement($('ticker-exist-notice'));
+				}
+				else{
+					success = true;
+					hideElement($('ticker-exist-notice'));
+				}
+			},
+
+			// error
+			function() {
+				console.log("Something is Wrong");
+			},false);
+	debugger;
+	if (success)
+	{
+		var url = './price';
+		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
+	}
+}
+
 function findSuggestions(){
 	var input_val =$('search-text-input').value;
 	if (input_val.length ===0){

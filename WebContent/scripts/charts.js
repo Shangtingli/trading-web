@@ -1,23 +1,15 @@
     function first_call_loadDefaultWatchList(){
     	var url = './price';
-    	var params = 'userid=' + 'none' + '&';
-    	for (let i=0; i < DEFAULT_WATCHLIST.length;i++){
-    		var assetlabel = 'asset' + i.toString() + '=';
-    		if (i != DEFAULT_WATCHLIST.length - 1)
-    		{
-    			params += assetlabel + DEFAULT_WATCHLIST[i] + '&';
-    		}
-    		else{
-    			params += assetlabel + DEFAULT_WATCHLIST[i];
-    		}
-    	}
-    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),url,params,false);
+    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url,false);
     }
     
-	function loadDefaultWatchList(renderElement,loadingElement,promptElement, url, params,isLoggedin,showButtons = false){
-    	renderElement.innerHTML = '';
+	function loadDefaultWatchList(renderElement,loadingElement,promptElement, refElement,url){
+    	debugger;
+		renderElement.innerHTML = '';
+    	var params = constructParams(refElement);
     	showLoading('Refreshing WatchList',loadingElement);
-
+    	var userid = refElement.innerHTML;
+    	var showButtons = (userid !== 'none');
         var req = JSON.stringify({});
         // make AJAX call
         ajax(
@@ -27,19 +19,57 @@
            // successful callback
            function(res) {
              var result = JSON.parse(res);
-         	 showPrice(result,renderElement,promptElement,showButtons,isLoggedin);
+         	 showPrice(result,renderElement,promptElement,showButtons);
            },
            // failed callback
            function() {
               console.log("Loading Default WatchList is Not Successful");
         });
-        
-        if (isLoggedin){
+        var userid = refElement.innerHTML;
+        if (userid !== 'none'){
         	hideElement(promptElement);
         }
-       
+        else{
+        	showElement(promptElement);
+        }
+        
     }
-
+	
+	function removeFromWatchList(){
+		debugger;
+		var userid = $('dummy').innerHTML;
+//		var symbol = $('search-text-input').value;
+//		var url = './watchlist';
+//		var params = 'method=' + 'add&' + 'userid=' + userid + '&symbol=' + symbol;
+//		var req = JSON.stringify({});
+//		var success = false;
+//		$('search-text-input').value = '';
+//		ajax('POST', url + '?' + params, req,
+//				// successful callback
+//				function(res) {
+//					var result = JSON.parse(res);
+//					if (result.result === 'failed'){
+//						console.log("Failed");
+//						showElement($('ticker-exist-notice'));
+//					}
+//					else{
+//						success = true;
+//						hideElement($('ticker-exist-notice'));
+//					}
+//				},
+//
+//				// error
+//				function() {
+//					console.log("Something is Wrong");
+//				},false);
+//		debugger;
+//		if (success)
+//		{
+//			var url = './price';
+//			loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
+//		}
+	}
+	
 	function initBalanceChart(){
 	    var trace1 = {
 	    		  x: [1, 2, 3, 4],
@@ -66,7 +96,7 @@
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
 	}
 	
-	function showPrice(results,renderElement,promptElement,showButtons,isLoggedin) {
+	function showPrice(results,renderElement,promptElement,showButtons) {
 		renderElement.innerHTML = '';
 		for (var res of results){
 			var container = $('div',{
@@ -99,13 +129,23 @@
 			text.innerHTML = '<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>'
 			container.appendChild(text);
 			container.appendChild(trend_icon);
+			
+			var btn_container = $('div', {
+	            className: 'watchlist-item-button-container',
+	        }); 
 			var rm_btn = $('button', {
 	            className: 'remove-from-watchlist-button',
 	        });
 			rm_btn.innerHTML = 'Remove';
-			rm_btn.style.display = (showButtons) ? ("block"):("none");
-			container.appendChild(rm_btn);
+			btn_container.appendChild(rm_btn);
+			btn_container.style.display = (showButtons) ? ("block"):("none");
+			container.appendChild(btn_container);
 			renderElement.appendChild(container);
+			debugger;
+			rm_btn.addEventListener('click',function(e){
+				debugger;
+				e.preventDefault();
+			});
 		}
 	}
 	

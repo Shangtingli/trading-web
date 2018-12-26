@@ -36,3 +36,8 @@
 	color: red;
 	cursor: pointer;
 }
+
+#ticker-exist-notice{
+	display: none;
+	color: red;
+}

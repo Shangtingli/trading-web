@@ -40,7 +40,7 @@
 				hideElement($('duplicate-username-notice'));
 				showElement($('register-success-notice'));
 				clearInput();
-				setTimeout(window.close,3000);
+				setTimeout(window.close,2000);
 			}
 		},
 

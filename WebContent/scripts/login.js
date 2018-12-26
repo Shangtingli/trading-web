@@ -10,7 +10,6 @@
 //		event.preventDefault();
 		var username = $('login-username-input').value;
 		var password = $('login-password-input').value;
-		var isLoggedin = false;
 		// The request parameters
 		var url = '../login';
 		var params = 'userid=' + username + '&password=' + password;
@@ -20,11 +19,12 @@
 		function(res) {
 			var result = JSON.parse(res);
 			if (result.result == 'success') {
+				$$('dummy').innerHTML = username;
 				onLoginNavBar(result.user_id);
 				onSearchBar();
 				onWatchList();
-				isLoggedin = true;
-				setTimeout(window.close,5000);
+				userid = username;
+				setTimeout(window.close,2000);
 			}
 			else{
 				showElement($('login-error-notice'));
@@ -34,13 +34,11 @@
 		function() {
 			console.log("Something is Wrong");
 		}, false);
-		
-		if (isLoggedin === false){
+		if ($$('dummy').innerHTML === 'none'){
 			return;
 		}
 		url = '../price';
-		var params = 'userid=' + username;
-		loadDefaultWatchList($$('watchlist-login'),$$('watchlist-login'), $$('watchlist-login-prompt'),url,params,true,true);
+		loadDefaultWatchList($$('watchlist-login'),$$('watchlist-login'), $$('watchlist-login-prompt'),$$('dummy'),url);
 	}
 	
 	function onLoginNavBar(userid){

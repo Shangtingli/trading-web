@@ -10,7 +10,7 @@
 		register_btn.addEventListener('click',showRegisterPopUp);
 		login_btn.addEventListener('click',showLoginPopUp);
 		logout_btn.addEventListener('click',destroyLogin);
-		initBalanceChart();
+//		initBalanceChart();
 		initSearchBar();
 		first_call_loadDefaultWatchList();
 		var time = undefined;
@@ -22,6 +22,10 @@
 		showElement($('login-button'));
 		hideElement($('logout-button'));
 		hideElement($('welcome-message'));
+		$('dummy').innerHTML = 'none';
+		var url = './price';
+    	var params = constructParams($('dummy'));
+		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
 	}
     window.onload = init;
 })();

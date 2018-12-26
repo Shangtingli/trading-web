@@ -9,7 +9,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-<script type="text/javascript" src = "scripts/default_watchlist.js"></script>
+<script type="text/javascript" src = "scripts/variables.js"></script>
 <script type="text/javascript" src = "scripts/utils.js"></script>
 <script type="text/javascript" src = "scripts/charts.js"></script>
 <script type="text/javascript" src = "scripts/searchbar.js"></script>
@@ -51,10 +51,6 @@
 				You Must Login to Use Your Own Watch List.
 			</p>
 			
-<!-- 			<div class = "watchlist-settings-button-container">
-				<button id = "refresh-button"><span> Refresh</span></button>
-				<button id = "stop-refresh-button" onclick="clearInterval(timeInt)"><span> Stop </span></button>
-			</div> -->
 		</div>
 		
 		<div class = "underlying-asset-chart-container"> 
@@ -81,6 +77,9 @@
 				</div>
 				<input type = "submit" value = "Add to WatchList" id = "search-submit-button">
 			</form>
+			<p id = "ticker-exist-notice">
+				The ticker you selected already exist.
+			</p>
 		</div>
 	</div>
 	
@@ -100,14 +99,14 @@
       </li>
     </ul>
   </footer>
+  
+  <div>
+  		<span id = "dummy">none</span>
+  </div>
 </body>
 </html>
 
 <!-- //TODO:
-1. Implement WatchList Feature into the DataBase
+1. Find out what is wrong with the remove button
 2. Implement the volume feature into database so that we could use suggestions according to volume
-3. Implement user defined WatchList on WatchList Column
-4. Implement the Chart on the front
-5. Implement features about refresh and stop
-6. Implement a set time interval featrue on the right of the website
-7. Implement add to watchlist feature. -->
+4. Implement the Chart on the front -->
