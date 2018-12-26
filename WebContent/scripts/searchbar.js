@@ -1,21 +1,20 @@
 function initSearchBar(){
-	var text_input = $('search-text-input');
-	text_input.addEventListener('input',findSuggestions);
-	var search_submit = $('search-submit-button');
-	search_submit.addEventListener('click',function(e){
-		e.preventDefault();
-		addtoWatchList();
-	});
+	var text_input = $('#search-text-input');
+	text_input.on('input',findSuggestions);
+	var search_submit = $('#search-submit-button');
+	debugger;
+	search_submit.on('click',addtoWatchList);
 }
 
 function addtoWatchList(){
-	var userid = $('dummy').innerHTML;
-	var symbol = $('search-text-input').value;
+	var userid = $('#username').val();
+	var symbol = $('#search-text-input').val();
 	var url = './watchlist';
 	var params = 'method=' + 'add&' + 'userid=' + userid + '&symbol=' + symbol;
 	var req = JSON.stringify({});
 	var success = false;
-	$('search-text-input').value = '';
+	$('#search-text-input').val('');
+	debugger;
 	ajax('POST', url + '?' + params, req,
 			// successful callback
 			function(res) {

@@ -1,42 +1,40 @@
-	function $(tag, options) {
-        if (!options) {
-            return document.getElementById(tag);
-        }
-
-        var element = document.createElement(tag);
-
-        for (var option in options) {
-            if (options.hasOwnProperty(option)) {
-                element[option] = options[option];
-            }
-        }
-
-        return element;
-    }
+//	function $(tag, options) {
+//        if (!options) {
+//            return document.getElementById(tag);
+//        }
+//
+//        var element = document.createElement(tag);
+//
+//        for (var option in options) {
+//            if (options.hasOwnProperty(option)) {
+//                element[option] = options[option];
+//            }
+//        }
+//
+//        return element;
+//    }
 	
-	function $$(tag, options) {
-        if (!options) {
-            return window.opener.document.getElementById(tag);
-        }
-
-        var element = window.opener.document.createElement(tag);
-
-        for (var option in options) {
-            if (options.hasOwnProperty(option)) {
-                element[option] = options[option];
-            }
-        }
-
-        return element;
-    }
+//	function $$(tag, options) {
+//        if (!options) {
+//            return window.opener.document.getElementById(tag);
+//        }
+//
+//        var element = window.opener.document.createElement(tag);
+//
+//        for (var option in options) {
+//            if (options.hasOwnProperty(option)) {
+//                element[option] = options[option];
+//            }
+//        }
+//
+//        return element;
+//    }
 	function showElement(element){
-		console.log(element);
-        element.style.display = 'block';
-        console.log(element.style.display);
+        element.css("display","block");
     }
 
     function hideElement(element){
-        element.style.display = 'none';
+    	element.css("display","none");
     }
     
     function showRegisterPopUp(){

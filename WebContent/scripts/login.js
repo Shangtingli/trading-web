@@ -1,14 +1,14 @@
 (function(){	
 	function init_login(){
-		$("login-submit").addEventListener('click',function(event){
+		$("#login-submit").on('click',function(event){
 			event.preventDefault();
 			login();
 		});
 	}
     
 	function login() {
-		var username = $('login-username-input').value;
-		var password = $('login-password-input').value;
+		var username = $('#login-username-input').val();
+		var password = $('#login-password-input').val();
 		var url = '../login';
 		var params = 'userid=' + username + '&password=' + password;
 		var req = JSON.stringify({});
@@ -16,10 +16,11 @@
 		function(res) {
 			var result = JSON.parse(res);
 			if (result.result == 'success') {
-				$$('dummy').innerHTML = username;
+				debugger;
+				$('#username',window.opener.document).val(username).triggerHandler('change');
 				onLoginNavBar(result.user_id);
-				onSearchBar();
-				onWatchList();
+//				onSearchBar();
+//				onWatchList();
 				setTimeout(window.close,2000);
 			}
 			else{
@@ -30,7 +31,7 @@
 		function() {
 			console.log("Something is Wrong");
 		}, false);
-		if ($$('dummy').innerHTML === 'none'){
+		if ($('#username').val().length === 0){
 			return;
 		}
 		url = '../price';
@@ -38,24 +39,24 @@
 	}
 	
 	function onLoginNavBar(userid){
-		showElement($('login-success-notice'));
-		hideElement($('login-error-notice'));
-		var welcome = $$('welcome-message');
-		var logout_btn = $$('logout-button');
-		welcome.innerHTML = '<span>Welcome ' + userid + '</span>';
+		showElement($('#login-success-notice'));
+		hideElement($('#login-error-notice'));
+		var welcome = $('#welcome-message',window.opener.document);
+		var logout_btn = $('#logout-button',window.opener.document);
+		welcome.html('<span>Welcome ' + userid + '</span>');
 		showElement(logout_btn);
 		showElement(welcome);
-		hideElement($$('login-button'));
+		hideElement($('#login-button',window.opener.document));
 	}
 	
 	function onSearchBar(){
-		showElement($$('search-title'));
-		showElement($$('search-form'));
-		hideElement($$('search-bar-login-prompt'));
+		showElement($('#search-title',window.opener.document));
+		showElement($('#search-form',window.opener.document));
+		hideElement($('#search-bar-login-prompt',window.opener.document));
 	}
 	
 	function onWatchList(){
-		showElement($$('action-button'));
+		showElement($('#action-button',window.opener.document));
 	}
     window.onload = init_login;
 })();

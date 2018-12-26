@@ -4,16 +4,16 @@
 	}
     
 	function onLogout(){
-		var register_btn = $("register-btn");
-		var login_btn = $("login-btn");
-		var logout_btn = $("logout-btn");
-		var action_btn = $('action-button');
-		register_btn.addEventListener('click',showRegisterPopUp);
-		login_btn.addEventListener('click',showLoginPopUp);
-		logout_btn.addEventListener('click',destroyLogin);
-		action_btn.addEventListener('click',showActionPopUp);
-//		initBalanceChart();
+		var register_btn = $("#register-btn");
+		var login_btn = $("#login-btn");
+		var logout_btn = $("#logout-btn");
+		var action_btn = $("#action-button");
+		register_btn.on('click',showRegisterPopUp);
+		login_btn.on('click',showLoginPopUp);
+		logout_btn.on('click',destroyLogin);
+		action_btn.on('click',showActionPopUp);
 		initSearchBar();
+		debugger;
 		first_call_loadDefaultWatchList();
 		var time = undefined;
 		if (time !== undefined)
@@ -21,12 +21,12 @@
 	}
 	
 	function destroyLogin(){
-		showElement($('login-button'));
-		hideElement($('logout-button'));
-		hideElement($('welcome-message'));
-		$('dummy').innerHTML = 'none';
+		showElement($("#login-button"));
+		hideElement($('#logout-button'));
+		hideElement($('#welcome-message'));
+		$('#dummy').innerHTML = 'none';
 		var url = './price';
-    	var params = constructParams($('dummy'));
+    	var params = constructParams($('#dummy'));
 		loadDefaultWatchList(true);
 	}
     window.onload = init;

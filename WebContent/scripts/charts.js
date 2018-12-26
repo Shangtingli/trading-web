@@ -4,16 +4,16 @@
     }
     
 //	function loadDefaultWatchList(renderElement,loadingElement,promptElement, refElement,url){
-    function loadDefaultWatchList(parentPage){
-    	var renderElement = (parentPage) ? ($('watchlist-login')): ($$('watchlist-login'));
-    	var refElement = (parentPage) ? ($('dummy')): ($$('dummy'));
-    	var promptElement = (parentPage) ? ($('watchlist-login-prompt')): ($$('watchlist-login-prompt'));
+    function loadDefaultWatchList(){
+    	var renderElement = (parentPage) ? ($('#watchlist-login')): ($("#watchlist-login",window.opener.document));
+    	var refElement = (parentPage) ? ($('username')): ($('username',window.opener.document));
+    	var promptElement = (parentPage) ? ($('#watchlist-login-prompt')): ($('#watchlist-login-prompt',window.opener.document));
     	var url = (parentPage) ? ('./price') : ('../price');
 		renderElement.innerHTML = '';
     	var params = constructParams(refElement);
     	showLoading('Refreshing WatchList',renderElement);
-    	var userid = refElement.innerHTML;
-    	var showButtons = (userid !== 'none');
+    	var userid = refElement.val();
+    	var showButtons = (userid.length > 0);
         var req = JSON.stringify({});
         // make AJAX call
         ajax(
@@ -24,13 +24,14 @@
            function(res) {
              var result = JSON.parse(res);
          	 showPrice(result,renderElement,promptElement,showButtons,parentPage);
+         	 addRemoveListeners(parentPage);
            },
            // failed callback
            function() {
               console.log("Loading Default WatchList is Not Successful");
         });
-        var userid = refElement.innerHTML;
-        if (userid !== 'none'){
+        var userid = refElement.val();
+        if (userid.length > 0){
         	hideElement(promptElement);
         }
         else{
@@ -40,7 +41,8 @@
     }
 	
 	function removeFromWatchList(asset){
-		var userid = $('dummy').innerHTML;
+		var dummyObject = $('dummy');
+		var userid = dummyObject.innerHTML;
 		var url = './watchlist';
 		var params = 'method=' + 'remove&' + 'userid=' + userid + '&symbol=' + asset;
 		var target_id = 'watchlist-item-button-container-' + asset;
@@ -53,8 +55,7 @@
 				function() {
 					console.log("Something is Wrong");
 				},false);
-		var url = './price';
-		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
+		loadDefaultWatchList(true);
 	}
 	
 	function initBalanceChart(){
@@ -84,7 +85,7 @@
 	}
 	
 	function showPrice(results,renderElement,promptElement,showButtons,parentPage) {
-		renderElement.innerHTML = '';
+		renderElement.html('');
 		for (var res of results){
 			var container = (parentPage) ? 
 			$('div',{
@@ -145,11 +146,6 @@
 	        });
 			rm_btn.innerHTML = 'Remove';
 			rm_btn.setAttribute('id','remove-from-watchlist-button-' + asset);
-			rm_btn.addEventListener('click',function(e){
-				var asset = e.target.id.replace(e.target.className + '-', '');
-				e.preventDefault();
-				removeFromWatchList(asset);
-			});
 			btn_container.appendChild(rm_btn);
 			btn_container.setAttribute('id','watchlist-item-button-container-' + asset);
 			btn_container.style.display = (showButtons) ? ("block"):("none");
@@ -166,4 +162,22 @@
         msg + '</p>'
 		
 		loadingElement.appendChild(blk);
+	}
+	
+	function addRemoveListeners(parentPage){
+		var elements = (parentPage) ? 
+				(document.getElementsByClassName('remove-from-watchlist-button')):
+					(window.opener.document.getElementsByClassName('remove-from-watchlist-button'));
+		for (var ele of elements){
+			ele.addEventListener('click',function(e){
+				debugger;
+				var asset = e.target.id.replace(e.target.className + '-', '');
+				e.preventDefault();
+				removeFromWatchList(asset);
+			});
+		}
+	}
+	
+	function myFunction(){
+		alert("hello");
 	}
