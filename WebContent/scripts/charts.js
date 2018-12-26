@@ -11,10 +11,10 @@
     			params += assetlabel + DEFAULT_WATCHLIST[i];
     		}
     	}
-    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),url,params);
+    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),url,params,false);
     }
     
-	function loadDefaultWatchList(renderElement,loadingElement,promptElement, url, params){
+	function loadDefaultWatchList(renderElement,loadingElement,promptElement, url, params,isLoggedin,showButtons = false){
     	renderElement.innerHTML = '';
     	showLoading('Refreshing WatchList',loadingElement);
 
@@ -27,12 +27,16 @@
            // successful callback
            function(res) {
              var result = JSON.parse(res);
-         	 showPrice(result,renderElement,promptElement);
+         	 showPrice(result,renderElement,promptElement,showButtons,isLoggedin);
            },
            // failed callback
            function() {
               console.log("Loading Default WatchList is Not Successful");
         });
+        
+        if (isLoggedin){
+        	hideElement(promptElement);
+        }
        
     }
 
@@ -62,7 +66,7 @@
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
 	}
 	
-	function showPrice(results,renderElement,promptElement) {
+	function showPrice(results,renderElement,promptElement,showButtons,isLoggedin) {
 		renderElement.innerHTML = '';
 		for (var res of results){
 			var container = $('div',{
@@ -95,9 +99,14 @@
 			text.innerHTML = '<span class = "asset-name">' + asset + '</span>' + '<br/>' + '<span class = "asset-price">' + price + '</span>'
 			container.appendChild(text);
 			container.appendChild(trend_icon);
+			var rm_btn = $('button', {
+	            className: 'remove-from-watchlist-button',
+	        });
+			rm_btn.innerHTML = 'Remove';
+			rm_btn.style.display = (showButtons) ? ("block"):("none");
+			container.appendChild(rm_btn);
 			renderElement.appendChild(container);
 		}
-		showElement(promptElement);
 	}
 	
 	function showLoading(msg,loadingElement){

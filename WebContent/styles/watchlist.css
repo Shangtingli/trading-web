@@ -45,3 +45,9 @@
 	font-family: "Times New Roman", Times, serif;
 	margin-left: 1vw;
 }
+
+.remove-from-watchlist-button{
+	width: 8vw;
+	height: 4vh;
+	margin: 4vh 0 auto auto;
+}

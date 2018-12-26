@@ -22,6 +22,7 @@
 			if (result.result == 'success') {
 				onLoginNavBar(result.user_id);
 				onSearchBar();
+				onWatchList();
 				isLoggedin = true;
 				setTimeout(window.close,5000);
 			}
@@ -39,7 +40,7 @@
 		}
 		url = '../price';
 		var params = 'userid=' + username;
-		loadDefaultWatchList($$('watchlist-login'),$$('watchlist-login'), $$('watchlist-login-prompt'),url,params);
+		loadDefaultWatchList($$('watchlist-login'),$$('watchlist-login'), $$('watchlist-login-prompt'),url,params,true,true);
 	}
 	
 	function onLoginNavBar(userid){
@@ -58,33 +59,9 @@
 		showElement($$('search-form'));
 		hideElement($$('search-bar-login-prompt'));
 	}
-//	function loadUserWatchList(userid){
-//		debugger;
-//		var url = './price';
-//		var params = 'userid=' + userid;
-//		var req = JSON.stringify({});
-//		debugger;
-//		ajax('GET', url + '?' + params, req,
-//				// successful callback
-//				function(res) {
-//					debugger;
-//					var result = JSON.parse(res);
-//
-//					// successfully logged in
-//					if (result.result == 'success') {
-//						onLoginNavBar(result.user_id);
-//					}
-//					else{
-//						showElement($('login-error-notice'));
-//					}
-//				},
-//
-//				// error
-//				function() {
-//					console.log("Something is Wrong");
-//				});
-//		
-//		
-//	}
+	
+	function onWatchList(){
+
+	}
     window.onload = init_login;
 })();
