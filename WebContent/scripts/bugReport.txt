@@ -1,0 +1,1 @@
+1. The WatchList Could only be Removed when you add at least one item to the watch list

@@ -1,13 +1,17 @@
     function first_call_loadDefaultWatchList(){
     	var url = './price';
-    	loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url,false);
+    	loadDefaultWatchList(true);
     }
     
-	function loadDefaultWatchList(renderElement,loadingElement,promptElement, refElement,url){
-    	debugger;
+//	function loadDefaultWatchList(renderElement,loadingElement,promptElement, refElement,url){
+    function loadDefaultWatchList(parentPage){
+    	var renderElement = (parentPage) ? ($('watchlist-login')): ($$('watchlist-login'));
+    	var refElement = (parentPage) ? ($('dummy')): ($$('dummy'));
+    	var promptElement = (parentPage) ? ($('watchlist-login-prompt')): ($$('watchlist-login-prompt'));
+    	var url = (parentPage) ? ('./price') : ('../price');
 		renderElement.innerHTML = '';
     	var params = constructParams(refElement);
-    	showLoading('Refreshing WatchList',loadingElement);
+    	showLoading('Refreshing WatchList',renderElement);
     	var userid = refElement.innerHTML;
     	var showButtons = (userid !== 'none');
         var req = JSON.stringify({});
@@ -19,7 +23,7 @@
            // successful callback
            function(res) {
              var result = JSON.parse(res);
-         	 showPrice(result,renderElement,promptElement,showButtons);
+         	 showPrice(result,renderElement,promptElement,showButtons,parentPage);
            },
            // failed callback
            function() {
@@ -35,39 +39,22 @@
         
     }
 	
-	function removeFromWatchList(){
-		debugger;
+	function removeFromWatchList(asset){
 		var userid = $('dummy').innerHTML;
-//		var symbol = $('search-text-input').value;
-//		var url = './watchlist';
-//		var params = 'method=' + 'add&' + 'userid=' + userid + '&symbol=' + symbol;
-//		var req = JSON.stringify({});
-//		var success = false;
-//		$('search-text-input').value = '';
-//		ajax('POST', url + '?' + params, req,
-//				// successful callback
-//				function(res) {
-//					var result = JSON.parse(res);
-//					if (result.result === 'failed'){
-//						console.log("Failed");
-//						showElement($('ticker-exist-notice'));
-//					}
-//					else{
-//						success = true;
-//						hideElement($('ticker-exist-notice'));
-//					}
-//				},
-//
-//				// error
-//				function() {
-//					console.log("Something is Wrong");
-//				},false);
-//		debugger;
-//		if (success)
-//		{
-//			var url = './price';
-//			loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
-//		}
+		var url = './watchlist';
+		var params = 'method=' + 'remove&' + 'userid=' + userid + '&symbol=' + asset;
+		var target_id = 'watchlist-item-button-container-' + asset;
+		var req = JSON.stringify({});
+		ajax('POST', url + '?' + params, req,
+				function(res) {
+					var result = JSON.parse(res);
+					$(target_id).remove();
+				},
+				function() {
+					console.log("Something is Wrong");
+				},false);
+		var url = './price';
+		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
 	}
 	
 	function initBalanceChart(){
@@ -96,32 +83,48 @@
 	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
 	}
 	
-	function showPrice(results,renderElement,promptElement,showButtons) {
+	function showPrice(results,renderElement,promptElement,showButtons,parentPage) {
 		renderElement.innerHTML = '';
 		for (var res of results){
-			var container = $('div',{
+			var container = (parentPage) ? 
+			$('div',{
 				className :'watchlist-item-container'
-			});
+			}) : $$('div',{
+				className :'watchlist-item-container'
+			})
+			;
 			var trend = res.trend;
 			var asset = res.asset;
 			var price = res.price;
-			var text = $('p', {
+			var text = (parentPage) ? 
+			$('p', {
 	            className: 'watchlist-item'
-	        });
+	        }) : $$('p', {
+	            className: 'watchlist-item'
+	        }) ;
 			if (trend === 'up'){
-				var trend_icon = $('img',{
+				var trend_icon = (parentPage)?$('img',{
+					className: "trend-icon",
+					src: 'assets/uparrow.png'
+				}) : $$('img',{
 					className: "trend-icon",
 					src: 'assets/uparrow.png'
 				});
 			}
 			else if (trend === 'down'){
-				var trend_icon = $('img',{
+				var trend_icon = (parentPage)?$('img',{
+					className: "trend-icon",
+					src: 'assets/downarrow.png'
+				}) : $$('img',{
 					className: "trend-icon",
 					src: 'assets/downarrow.png'
 				});
 			}
 			else{
-				var trend_icon = $('img',{
+				var trend_icon = (parentPage)?$('img',{
+					className: "trend-icon",
+					src: 'assets/circle.png'
+				}) : $$('img',{
 					className: "trend-icon",
 					src: 'assets/circle.png'
 				});
@@ -130,22 +133,28 @@
 			container.appendChild(text);
 			container.appendChild(trend_icon);
 			
-			var btn_container = $('div', {
+			var btn_container = (parentPage) ? $('div', {
+	            className: 'watchlist-item-button-container',
+	        }) : $$('div', {
 	            className: 'watchlist-item-button-container',
 	        }); 
-			var rm_btn = $('button', {
+			var rm_btn = (parentPage)?$('button', {
+	            className: 'remove-from-watchlist-button',
+	        }) : $$('button', {
 	            className: 'remove-from-watchlist-button',
 	        });
 			rm_btn.innerHTML = 'Remove';
+			rm_btn.setAttribute('id','remove-from-watchlist-button-' + asset);
+			rm_btn.addEventListener('click',function(e){
+				var asset = e.target.id.replace(e.target.className + '-', '');
+				e.preventDefault();
+				removeFromWatchList(asset);
+			});
 			btn_container.appendChild(rm_btn);
+			btn_container.setAttribute('id','watchlist-item-button-container-' + asset);
 			btn_container.style.display = (showButtons) ? ("block"):("none");
 			container.appendChild(btn_container);
 			renderElement.appendChild(container);
-			debugger;
-			rm_btn.addEventListener('click',function(e){
-				debugger;
-				e.preventDefault();
-			});
 		}
 	}
 	

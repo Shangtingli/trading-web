@@ -7,15 +7,12 @@
 	}
     
 	function login() {
-//		event.preventDefault();
 		var username = $('login-username-input').value;
 		var password = $('login-password-input').value;
-		// The request parameters
 		var url = '../login';
 		var params = 'userid=' + username + '&password=' + password;
 		var req = JSON.stringify({});
 		ajax('GET', url + '?' + params, req,
-		// successful callback
 		function(res) {
 			var result = JSON.parse(res);
 			if (result.result == 'success') {
@@ -23,7 +20,6 @@
 				onLoginNavBar(result.user_id);
 				onSearchBar();
 				onWatchList();
-				userid = username;
 				setTimeout(window.close,2000);
 			}
 			else{
@@ -38,7 +34,7 @@
 			return;
 		}
 		url = '../price';
-		loadDefaultWatchList($$('watchlist-login'),$$('watchlist-login'), $$('watchlist-login-prompt'),$$('dummy'),url);
+		loadDefaultWatchList(false);
 	}
 	
 	function onLoginNavBar(userid){

@@ -34,7 +34,6 @@ function addtoWatchList(){
 			function() {
 				console.log("Something is Wrong");
 			},false);
-	debugger;
 	if (success)
 	{
 		var url = './price';

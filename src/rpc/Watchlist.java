@@ -42,16 +42,24 @@ public class Watchlist extends HttpServlet {
 		MySQLConnection conn = new MySQLConnection();
 		JSONObject obj = new JSONObject();
 		try {
+			String method = request.getParameter("method");
 			String userid = request.getParameter("userid");
    			String symbol = request.getParameter("symbol");
-   			if (conn.isExistedWatchList(userid, symbol)) {
-   				obj.put("result","failed");
+   			if (method.equals("add")) {
+	   			if (conn.isExistedWatchList(userid, symbol)) {
+	   				obj.put("result","failed");
+	   			}
+	   			else {
+	   				conn.setWatchList(userid, symbol);
+	   				obj.put("result","success");
+	   			}
+	   			RpcHelper.writeJsonObject(response, obj);
    			}
-   			else {
-   				conn.setWatchList(userid, symbol);
+   			else if (method.equals("remove")) {
+   				conn.unSetWatchList(userid, symbol);
    				obj.put("result","success");
+   				RpcHelper.writeJsonObject(response, obj);
    			}
-   			RpcHelper.writeJsonObject(response, obj);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

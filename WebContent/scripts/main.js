@@ -25,7 +25,7 @@
 		$('dummy').innerHTML = 'none';
 		var url = './price';
     	var params = constructParams($('dummy'));
-		loadDefaultWatchList($('watchlist-login'),$('watchlist-login'),$('watchlist-login-prompt'),$('dummy'),url);
+		loadDefaultWatchList(true);
 	}
     window.onload = init;
 })();
