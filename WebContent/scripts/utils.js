@@ -55,6 +55,13 @@
                 directories=no,status=yes');
     }
     
+    function showActionPopUp(){
+    	popupWindow = window.open(
+                'pages/action.html','popUpWindow',
+                'height=600,width=800,left=10,top=10,resizable=yes,\
+                scrollbars=yes,toolbar=yes,menubar=no,location=no,\
+                directories=no,status=yes');
+    }
     function ajax(method, url, data, callback, errorHandler, async = true) {
         var xhr = new XMLHttpRequest();
 

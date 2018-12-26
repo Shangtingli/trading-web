@@ -55,7 +55,7 @@
 	}
 	
 	function onWatchList(){
-
+		showElement($$('action-button'));
 	}
     window.onload = init_login;
 })();

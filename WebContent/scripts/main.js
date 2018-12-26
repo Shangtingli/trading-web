@@ -7,9 +7,11 @@
 		var register_btn = $("register-btn");
 		var login_btn = $("login-btn");
 		var logout_btn = $("logout-btn");
+		var action_btn = $('action-button');
 		register_btn.addEventListener('click',showRegisterPopUp);
 		login_btn.addEventListener('click',showLoginPopUp);
 		logout_btn.addEventListener('click',destroyLogin);
+		action_btn.addEventListener('click',showActionPopUp);
 //		initBalanceChart();
 		initSearchBar();
 		first_call_loadDefaultWatchList();
