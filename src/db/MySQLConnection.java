@@ -74,6 +74,32 @@ public class MySQLConnection {
 		return false;
 	}
 	/*
+	 * Find Holdings for the user
+	 */
+	public Map<String,Double> getHoldings(String userid) {
+		Map<String,Double> res = new HashMap<>();
+		if (conn == null) {
+			System.out.println("DBConnection is NULL");
+			return res;
+		}
+		
+		try {
+			String sql = "SELECT symbol,position FROM stocks WHERE user_id = ?";
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, userid);
+			ResultSet rs = pStatement.executeQuery();
+			while(rs.next()) {
+				res.put(rs.getString("symbol"),rs.getDouble("position"));
+			}
+			
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	/*
 	 * Find Suggestions for Stock Symbols
 	 */
 	public JSONObject findSuggestions(String fragment) {
@@ -148,56 +174,31 @@ public class MySQLConnection {
 		}
 	}
 	
-	/*
-	 * Get Users Portfolio
-	 */
-	public List<String> getUserPortfolio(String userid){
+	
+	public Map<String, Double> getUserMeta(String userid) {
+		Map<String, Double> res = new HashMap<>();
 		if (conn == null) {
 			System.out.println("DBConnection is NULL");
-			return new ArrayList<>();
+			return res;
 		}
 		
 		try {
-			List<String> res = new ArrayList<>();
-			String sql = "SELECT symbol from stocks WHERE user_id = ?";
+			String sql = "SELECT balance, asset_value, total_value from users WHERE user_id = ?";
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			pStatement.setString(1, userid);
+			System.out.println(pStatement.toString());
 			ResultSet rs = pStatement.executeQuery();
-			while (rs.next()) {
-				String symbol = rs.getString("symbol");
-				res.add(symbol);
-			}
-			
+			rs.next();
+			res.put("balance", rs.getDouble("balance"));
+			res.put("asset_value", rs.getDouble("asset_value"));
+			res.put("total_value", rs.getDouble("total_value"));
 			return res;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return new ArrayList<>();
+		return res;
 	}
-	
-	/*
-	 * Get Users Balance
-	 */
-	public double getUserBalance(String userid){
-		if (conn == null) {
-			System.out.println("DBConnection is NULL");
-			return 0.0;
-		}
-		
-		try {
-			String sql = "SELECT  from users WHERE user_id = ?";
-			PreparedStatement pStatement = conn.prepareStatement(sql);
-			pStatement.setString(1, userid);
-			ResultSet rs = pStatement.executeQuery();
-			return rs.getDouble("balance");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return 0;
-	}
-	
 	/*
 	 * Get Users position at a specific stock
 	 */
@@ -227,15 +228,24 @@ public class MySQLConnection {
 	/*
 	 * Update done to when users submit a buy or sell request
 	 */
-	public void submitAction(String userid, String action, double amount, String symbol,double price) {
+	public void submitAction(String userid, String action, double amount, String symbol) {
 		if (conn == null) {
 			System.out.println("DBConnection is NULL");
 			return;
 		}
 		
+		AlphaVantageAPI api = new AlphaVantageAPI();
 		try {
 			double position = getPosition(userid, symbol);
 			action_id ++ ;
+			List<Item> records = api.getItems(api.getResponse(symbol)); 
+			if (records.size () ==0) {
+				System.out.println("The Action you sent does not work because of fucking API Restrictions");
+				return;
+			}
+			int len = records.size();
+			double price = records.get(len-1).getOpen();
+			double balanceChanged = (action.equals("buy")) ? (price * amount):(- price * amount);
 			/*
 			 * First Set up the logs
 			 */
@@ -254,7 +264,7 @@ public class MySQLConnection {
 			 */
 			double newPosition = (action.equals("buy")? (position + amount) : (position - amount));
 			if (newPosition != 0) {
-				sql = "INSERT INTO stocks (user_id, symbol, position) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE position = ?;";
+				sql = "INSERT INTO stocks (user_id, symbol, position) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE position = ?";
 				pStatement = conn.prepareStatement(sql);
 				pStatement.setString(1, userid);
 				pStatement.setString(2, symbol);
@@ -268,6 +278,22 @@ public class MySQLConnection {
 				pStatement.setString(2, symbol);
 				pStatement.execute();
 			}
+			
+			/*
+			 * Then Update Balance and Asset value
+			 */
+			if (balanceChanged > 0) {
+				sql = "UPDATE users SET balance = balance - ?, asset_value = asset_value + ? WHERE user_id = ?";
+			}
+			else {
+				sql = "UPDATE users SET balance = balance + ?, asset_value = asset_value - ? WHERE user_id = ?";
+			}
+			pStatement = conn.prepareStatement(sql);
+			pStatement.setDouble(1, Math.abs(balanceChanged));
+			pStatement.setDouble(2, Math.abs(balanceChanged));
+			pStatement.setString(3, userid);
+			System.out.println(pStatement.toString());
+			pStatement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -278,31 +304,37 @@ public class MySQLConnection {
 	 * Update done when stock price is updated 
 	 */
 	
-	public void updateBalance(String userid) {
+	public void updateAssetBalance(String userid) {
 		if (conn == null) {
 			System.out.println("DBConnection is NULL");
 			return;
 		}
 		AlphaVantageAPI api = new AlphaVantageAPI();
-		double newBalance = 0.0;
+		double asset_value = 0.0;
 		//Get the users portfolio of stocks
-		List<String> portfolio = getUserPortfolio(userid);
+		List<String> portfolio = new ArrayList<>(getHoldings(userid).keySet());
 		
 		for (String asset : portfolio) {
 			//Get all the newest price from the api and calculate the new balance of users
 			List<Item> records = api.getItems(api.getResponse(asset));
+			if (records.size () ==0) {
+				System.out.println("The Action you sent does not work because of fucking API Restrictions");
+				return;
+			}
 			int len = records.size();
-			double newestPrice = (records.get(len-1).getOpen() + records.get(len-1).getClose())/2.0;
+			double newestPrice = records.get(len-1).getOpen();
 			double position = getPosition(userid, asset);
-			newBalance += newestPrice * position;
+			asset_value += newestPrice * position;
 		}
 		
-		//Update the balance of users in the table
+		
 		try {
-			String sql = "UPDATE users SET balance = ? WHERE userid = ?";
+			//Update the asset_value of user in the table
+			String sql = "UPDATE users SET asset_value = ?, total_value = ? + balance WHERE userid = ?";
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(2, userid);
-			statement.setDouble(1, newBalance);
+			statement.setString(3, userid);
+			statement.setDouble(1, asset_value);
+			statement.setDouble(2, asset_value);
 			statement.execute();
 		}
 		catch (Exception e) {
@@ -315,16 +347,31 @@ public class MySQLConnection {
 	 */
 	public void AddBalance(String userid, double amount) {
 		try {
-			String sql = "UPDATE users SET balance = balance + ? WHERE user_id = ?";
+			String sql = "UPDATE users SET balance = balance + ?, total_value = total_value + ? WHERE user_id = ?";
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(2, userid);
+			statement.setString(3, userid);
 			statement.setDouble(1, amount);
+			statement.setDouble(2, amount);
 			statement.execute();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void RemoveBalance(String userid, double amount) {
+		try {
+			String sql = "UPDATE users SET balance = balance - ?, total_value = total_value - ? WHERE user_id = ?";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(3, userid);
+			statement.setDouble(1, amount);
+			statement.setDouble(2, amount);
+			statement.execute();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean Verify(String userid, String password) {
@@ -445,6 +492,7 @@ public class MySQLConnection {
 		MySQLConnection conn = new MySQLConnection();
 		for (int i=0; i < DataMock.MOCK_USER_NAMES.length; i++) {
 			conn.addUser(DataMock.MOCK_USER_NAMES[i], DataMock.MOCK_PASSWORDS[i], DataMock.MOCK_FIRST_NAMES[i], DataMock.MOCK_LAST_NAMES[i]);
+			conn.AddBalance(DataMock.MOCK_USER_NAMES[i], 20000);
 		}
 		/*
 		 * ========= Actions=================
@@ -454,17 +502,19 @@ public class MySQLConnection {
 		 * LST
 		 */
 		for (int i = 0; i < DataMock.MOCK_LST_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_ACTIONS[i], DataMock.MOCK_LST_AMOUNTS[i], DataMock.MOCK_LST_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_ACTIONS[i], DataMock.MOCK_LST_AMOUNTS[i], DataMock.MOCK_LST_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_LST_WATCHLIST.length; i++) {
 			conn.setWatchList(DataMock.MOCK_USER_NAMES[0], DataMock.MOCK_LST_WATCHLIST[i]);
 		}
+		
+		
 		/*
 		 * WYY
 		 */
 		for (int i = 0; i < DataMock.MOCK_WYY_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[1], DataMock.MOCK_WYY_ACTIONS[i], DataMock.MOCK_WYY_AMOUNTS[i], DataMock.MOCK_WYY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[1], DataMock.MOCK_WYY_ACTIONS[i], DataMock.MOCK_WYY_AMOUNTS[i], DataMock.MOCK_WYY_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_WYY_WATCHLIST.length; i++) {
@@ -474,7 +524,7 @@ public class MySQLConnection {
 		 * AWD
 		 */
 		for (int i = 0; i < DataMock.MOCK_AWD_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[2], DataMock.MOCK_AWD_ACTIONS[i], DataMock.MOCK_AWD_AMOUNTS[i], DataMock.MOCK_AWD_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[2], DataMock.MOCK_AWD_ACTIONS[i], DataMock.MOCK_AWD_AMOUNTS[i], DataMock.MOCK_AWD_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_AWD_WATCHLIST.length; i++) {
@@ -484,7 +534,7 @@ public class MySQLConnection {
 		 * CXY
 		 */
 		for (int i = 0; i < DataMock.MOCK_CXY_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[3], DataMock.MOCK_CXY_ACTIONS[i], DataMock.MOCK_CXY_AMOUNTS[i], DataMock.MOCK_CXY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[3], DataMock.MOCK_CXY_ACTIONS[i], DataMock.MOCK_CXY_AMOUNTS[i], DataMock.MOCK_CXY_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_CXY_WATCHLIST.length; i++) {
@@ -494,7 +544,7 @@ public class MySQLConnection {
 		 * YZY
 		 */
 		for (int i = 0; i < DataMock.MOCK_YZY_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[4], DataMock.MOCK_YZY_ACTIONS[i], DataMock.MOCK_YZY_AMOUNTS[i], DataMock.MOCK_YZY_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[4], DataMock.MOCK_YZY_ACTIONS[i], DataMock.MOCK_YZY_AMOUNTS[i], DataMock.MOCK_YZY_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_YZY_WATCHLIST.length; i++) {
@@ -504,7 +554,7 @@ public class MySQLConnection {
 		 * ZSJ
 		 */
 		for (int i = 0; i < DataMock.MOCK_ZSJ_ACTIONS.length; i++) {
-			conn.submitAction(DataMock.MOCK_USER_NAMES[5], DataMock.MOCK_ZSJ_ACTIONS[i], DataMock.MOCK_ZSJ_AMOUNTS[i], DataMock.MOCK_ZSJ_ACTION_SYMBOLS[i], DataMock.MOCK_PRICE);
+			conn.submitAction(DataMock.MOCK_USER_NAMES[5], DataMock.MOCK_ZSJ_ACTIONS[i], DataMock.MOCK_ZSJ_AMOUNTS[i], DataMock.MOCK_ZSJ_ACTION_SYMBOLS[i]);
 		}
 		
 		for (int i = 0; i < DataMock.MOCK_ZSJ_WATCHLIST.length; i++) {
@@ -514,7 +564,6 @@ public class MySQLConnection {
 		/**
 		 * Add Balance
 		 */
-		conn.AddBalance(DataMock.MOCK_USER_NAMES[1], 1000);
 		conn.close();
 		
 	}

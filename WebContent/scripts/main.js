@@ -26,6 +26,7 @@
 			showActionPopUp();
 		});
 		initSearchBar();
+		showElement($('#user-balance-login-prompt'));
 		first_call_loadDefaultWatchList();
 		var time = undefined;
 		if (time !== undefined)
@@ -40,6 +41,14 @@
 		$('#username').val('');
 		var url = './price';
     	var params = constructParams($('#username'));
+    	$('#user-meta-data-container').html('<p id = "user-balance-login-prompt">' + 
+		'Login to see user balance information'+
+		'</p>' + 
+		'<div id = "user-actual-data-container">' + 
+			'<div id = "balance-and-assets"> ' + 
+			'</div> ' + 
+			'<div id = "assets-holdings">' +		
+			'</div></div>');
 		loadDefaultWatchList();
 	}
     window.onload = init;

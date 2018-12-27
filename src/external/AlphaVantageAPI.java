@@ -26,7 +26,7 @@ import entity.Item.ItemBuilder;
 //}
 public class AlphaVantageAPI {
 	private static final String URL = "https://www.alphavantage.co/query?";
-	private static final String API_KEY =  "IJ02XXB3R3J8DSDZ";
+	private static final String API_KEY =  "8OK2OQMFJ7ATJYOF";
 	private static final String INTRA_DAY = "TIME_SERIES_INTRADAY";
 	private static final String INTERVAL = "1min";
 	private static final String COMPACT_MODE = "compact";
@@ -63,7 +63,6 @@ public class AlphaVantageAPI {
 			in.close();
 			JSONObject obj = new JSONObject(response.toString());
 			String metaKey = "Time Series (" + INTERVAL + ")";
-			System.out.println(metaKey);
 			if (!obj.isNull(metaKey))
 			{
 				JSONObject timeSeries = obj.getJSONObject(metaKey);

@@ -38,6 +38,8 @@ public class MySQLTableCreation {
 					+ "first_name VARCHAR(255) NOT NULL,"
 					+ "last_name VARCHAR (255) NOT NULL,"
 					+ "balance DOUBLE DEFAULT 0.0,"
+					+ "asset_value DOUBLE DEFAULT 0.0,"
+					+ "total_value DOUBLE DEFAULT 0.0,"
 					+ "PRIMARY KEY (user_id)"
 					+ ")";
 			

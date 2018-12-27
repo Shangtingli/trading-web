@@ -83,7 +83,6 @@
         if (data === null) {
             xhr.send();
         } else {
-            console.log(data);
             xhr.setRequestHeader("Content-Type",
                 "application/json;charset=utf-8");
             xhr.send(data);

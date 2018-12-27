@@ -8,13 +8,14 @@
     	var promptElement = $('#watchlist-login-prompt');
     	var url = './price';
 		renderElement.html('');
+		debugger;
     	var params = constructParams(refElement);
     	showLoading('Refreshing WatchList',renderElement);
     	var userid = refElement.val();
     	var showButtons = (userid.length > 0);
         var req = JSON.stringify({});
         var query = url + '?' + params;
-        console.log(query);
+        debugger;
         // make AJAX call
         ajax(
            'GET',
@@ -142,6 +143,45 @@
 		})
 	}
 	
+	function loadUserMetaData(){
+		var url = './usermeta';
+		var params = 'userid=' + $('#username').val();
+		var req = JSON.stringify({});
+		ajax('GET',url + '?' + params,req,
+				function(res){
+			var result = JSON.parse(res);
+			debugger;
+			var holdings_container = $('#assets-holdings');
+			var balance_container = $('#balance-and-assets');
+			holdings_container.html('');
+			balance_container.html('');
+			holdings_container.append($('<div> <span>Your Holdings: </span></div>'));
+			balance_container.append($('<div> <span>Your Balance and Assets: </span></div>'))
+			var keys1 = Object.keys(result[0]);
+			var list1 = $('<ul></ul>');
+			for (var key of keys1){
+				var item = $('<li></li>');
+				item.html(key + ' : ' + result[0][key]);
+				list1.append(item);
+			}
+			holdings_container.append(list1);
+			hideElement($('#user-balance-login-prompt'));
+			var keys2 = Object.keys(result[1]);
+			var list2 = $('<ul></ul>');
+			for (var key of keys2){
+				var item = $('<li></li>');
+				item.html(key + ' : ' + result[1][key]);
+				list2.append(item);
+			}
+			balance_container.append(list2);
+			
+
+		},
+		function (e){
+			console.log("Something went wrong")
+		},false)
+	}
 	function onChangeUserId(){
+		loadUserMetaData();
 		loadDefaultWatchList();
 	}

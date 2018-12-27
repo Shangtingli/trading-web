@@ -30,6 +30,31 @@ button > span{
 	height: 90vh;
 }
 
+.asset-chart-container{
+	width: 60vw;
+	height: 60vh;
+	border: 1.5px solid white
+}
+
+#user-actual-data-container{
+	width: 60vw;
+	height: 22vh;
+	border: 1px solid white;
+	display: flex;
+}
+
+#balance-and-assets{
+	width: 28vw;
+	height: 20vh;
+	border: 1px solid white
+}
+
+#assets-holdings{
+	width: 28vw;
+	height: 20vh;
+	border: 1px solid white
+}
+
 .search-bar-container{
 	border: 3px solid white;
 	width: 30vw;

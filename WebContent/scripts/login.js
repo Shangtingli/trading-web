@@ -20,7 +20,7 @@
 				onLoginNavBar(result.user_id);
 				onSearchBar();
 				onWatchList();
-				setTimeout(window.close,2000);
+				setTimeout(window.close,1500);
 			}
 			else{
 				showElement($('#login-error-notice'));
@@ -33,8 +33,7 @@
 		if ($('#username',window.opener.document).val().length === 0){
 			return;
 		}
-		url = '../price';
-		loadDefaultWatchList(false);
+		loadDefaultWatchList();
 	}
 	
 	function onLoginNavBar(userid){
