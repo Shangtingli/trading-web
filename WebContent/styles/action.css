@@ -19,6 +19,10 @@ button {
     color: white;
     font-weight: 700;
     cursor: pointer;
+    width: 8vw;
+    height: 5vh;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 input {
@@ -34,7 +38,7 @@ input {
     font-size: 2vw;
 }
 
-#buy-sell-section-title, #change-balance-section-title{
+#long-short-section-title, #change-balance-section-title{
     font-weight: 600;
     color: aqua;
 }
@@ -49,6 +53,14 @@ input {
 
 .invalid-input-notice{
 	color: red;
+}
+
+#change-balance-container{
+	margin-top: 10vh;
+}
+
+#long-short-container{
+	margin-top: 5vh;
 }
 
 

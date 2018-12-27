@@ -8,6 +8,19 @@ p, a, span {
 	color: white;
 }
 
+button {
+	background:linear-gradient( to top right, rgba(29, 193, 45,1) 0%, rgba(29, 193, 45 ,1) 100%);
+    box-shadow: 1px 1px 30px rgba(255,255,255 ,1);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    width: 60px;
+    height: 30px;
+}
+
+input {
+	margin-top: 5px;
+}
 #register-empty-field-notice{
 	display: none;
 	color: red;

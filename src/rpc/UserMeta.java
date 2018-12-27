@@ -44,7 +44,7 @@ public class UserMeta extends HttpServlet {
 			Map<String,Double> holdings = conn.getHoldings(userid);
 			Map<String,Double> usermeta = conn.getUserMeta(userid);
 			for (Map.Entry<String, Double> entry : holdings.entrySet()) {
-				obj1.put(entry.getKey(), entry.getValue());
+				obj1.put(entry.getKey(),entry.getValue().toString());
 			}
 			
 			for (Map.Entry<String, Double> entry : usermeta.entrySet()) {
@@ -58,7 +58,7 @@ public class UserMeta extends HttpServlet {
 				else if (entry.getKey().equals("asset_value")) {
 					key = "Portfolio Value";
 				}
-				obj2.put(key, entry.getValue());
+				obj2.put(key, entry.getValue().toString());
 			}
 			System.out.println(usermeta);
 			array.put(obj1);

@@ -227,28 +227,40 @@ public class MySQLConnection {
 	/*
 	 * Update done to when users submit a buy or sell request
 	 */
-	public void submitAction(String userid, String action, double amount, String symbol) {
+	public JSONObject submitAction(String userid, String action, double amount, String symbol) {
+		JSONObject res = new JSONObject();
 		if (conn == null) {
 			System.out.println("DBConnection is NULL");
-			return;
+			return res;
 		}
 		
 		AlphaVantageAPI api = new AlphaVantageAPI();
 		try {
 			double position = getPosition(userid, symbol);
 			action_id ++ ;
-			List<Item> records = api.getItems(api.getResponse(symbol)); 
-			if (records.size () ==0) {
-				System.out.println("The Action you sent does not work because of fucking API Restrictions");
-				return;
+			JSONObject response = api.getResponse(symbol);
+
+			if (response.length() ==0) {
+				System.out.println("The Action you sent does not work, either because of API Restriction or the symbol does not exist");
+				res.put("result", "failure").put("reason","symbol");
+				return res;
 			}
+			
+			List<Item> records = api.getItems(response); 
 			int len = records.size();
 			double price = records.get(len-1).getOpen();
 			double balanceChanged = (action.equals("buy")) ? (price * amount):(- price * amount);
+			Map<String, Double> metadata = getUserMeta(userid);
+			double total_value = metadata.get("total_value");
+			double capital = metadata.get("balance");
+			if (balanceChanged > Math.min(total_value, capital)) {
+				res.put("result", "failure").put("reason","amount");
+				return res;
+			}
 			/*
 			 * First Set up the logs
 			 */
-			String sql = "INSERT INTO log(action_id,user_id,symbol,action,action_vol,price)" + 
+			String sql = "INSERT INTO log(action_id,user_id,symbol,action,action_vol,price) " + 
 						"VALUES(?,?,?,?,?,?);";
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 			pStatement.setString(1, Integer.toString(action_id));
@@ -257,6 +269,8 @@ public class MySQLConnection {
 			pStatement.setString(4, action);
 			pStatement.setDouble(5, amount);
 			pStatement.setDouble(6, price);
+			System.out.println("Set up Logs Statement");
+			System.out.println(pStatement.toString());
 			pStatement.execute();
 			/*
 			 * Then Update position
@@ -264,18 +278,23 @@ public class MySQLConnection {
 			double newPosition = (action.equals("buy")? (position + amount) : (position - amount));
 			if (newPosition != 0) {
 				sql = "INSERT INTO stocks (user_id, symbol, position) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE position = ?";
-				pStatement = conn.prepareStatement(sql);
-				pStatement.setString(1, userid);
-				pStatement.setString(2, symbol);
-				pStatement.setDouble(3, newPosition);
-				pStatement.setDouble(4, newPosition);
-				pStatement.execute();
+				PreparedStatement pStatement1 = conn.prepareStatement(sql);
+				pStatement1.setString(1, userid);
+				pStatement1.setString(2, symbol);
+				pStatement1.setDouble(3, newPosition);
+				pStatement1.setDouble(4, newPosition);
+				System.out.println("New Position is not 0 Statement");
+				System.out.println(pStatement1.toString());
+				pStatement1.execute();
 			}
 			else {
-				sql = "DELETE FROM stocks WHERE userid = ? AND symbol = ?";
-				pStatement.setString(1, userid);
-				pStatement.setString(2, symbol);
-				pStatement.execute();
+				sql = "DELETE FROM stocks WHERE user_id = ? AND symbol = ?";
+				PreparedStatement pStatement2 = conn.prepareStatement(sql);
+				pStatement2.setString(1, userid);
+				pStatement2.setString(2, symbol);
+				System.out.println("Delete From Stocks Statement");
+				System.out.println(pStatement2.toString());
+				pStatement2.execute();
 			}
 			
 			/*
@@ -291,11 +310,16 @@ public class MySQLConnection {
 			pStatement.setDouble(1, Math.abs(balanceChanged));
 			pStatement.setDouble(2, Math.abs(balanceChanged));
 			pStatement.setString(3, userid);
+			System.out.println("Update Balance Statement");
 			System.out.println(pStatement.toString());
 			pStatement.execute();
+			res.put("result", "success");
+			return res;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return res;
 	}
 	
 	

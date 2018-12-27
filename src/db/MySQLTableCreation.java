@@ -50,8 +50,7 @@ public class MySQLTableCreation {
 					+ "symbol VARCHAR (255) NOT NULL,"
 					+ "position DOUBLE,"
 					+ "last_updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-					+ "PRIMARY KEY (user_id, symbol),"
-					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
+					+ "PRIMARY KEY (user_id, symbol)"
 					+ ")";
 			
 			//Action could only be buy or sell
@@ -64,16 +63,14 @@ public class MySQLTableCreation {
 					+ "action_vol INT NOT NULL,"
 					+ "time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
 					+ "price DOUBLE,"
-					+ "PRIMARY KEY (action_id),"
-					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
+					+ "PRIMARY KEY (action_id)"
 					+ ")";
 			statement.executeUpdate(sql);
 			
 			sql = "CREATE TABLE watchlists ("
 					+ "user_id VARCHAR(255) NOT NULL,"
 					+ "symbol VARCHAR (255) NOT NULL,"
-					+ "PRIMARY KEY (user_id,symbol),"
-					+ "FOREIGN KEY (user_id) REFERENCES users(user_id)"
+					+ "PRIMARY KEY (user_id,symbol)"
 					+ ")";
 			statement.executeUpdate(sql);
 			

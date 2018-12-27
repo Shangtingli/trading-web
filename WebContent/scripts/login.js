@@ -29,11 +29,10 @@
 		// error
 		function() {
 			console.log("Something is Wrong");
-		}, false);
+		});
 		if ($('#username',window.opener.document).val().length === 0){
 			return;
 		}
-		loadDefaultWatchList();
 	}
 	
 	function onLoginNavBar(userid){
@@ -50,6 +49,7 @@
 	function onSearchBar(){
 		showElement($('#action-button',window.opener.document));
 		showElement($('#search-submit-button',window.opener.document));
+		showElement($('#search-buttons-container',window.opener.document));
 		showElement($('#search-title',window.opener.document));
 		showElement($('#search-form',window.opener.document));
 		hideElement($('#search-bar-login-prompt',window.opener.document));
