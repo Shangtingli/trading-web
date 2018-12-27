@@ -1,0 +1,55 @@
+body,html{
+	background-color:black;
+	margin: 0px;
+	padding: 0px;
+}
+a, span, p{
+	color: white;
+}
+
+header{
+	background-color:darkcyan;
+	width: 100%;
+	height:8vh;
+	display: inline-block;
+}
+button {
+	background:linear-gradient( to top right, rgba(29, 193, 45,1) 0%, rgba(29, 193, 45 ,1) 100%);
+    box-shadow: 1px 1px 30px rgba(255,255,255 ,1);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+input {
+	margin-top: 1vh;
+}
+
+#main-container {
+    text-align: center;
+}
+#action-page-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 2vw;
+}
+
+#buy-sell-section-title, #change-balance-section-title{
+    font-weight: 600;
+    color: aqua;
+}
+
+#change-balance-failure-notice{
+	color: red;
+}
+
+#change-balance-success-notice{
+	color: yellow;
+}
+
+.invalid-input-notice{
+	color: red;
+}
+
+
+

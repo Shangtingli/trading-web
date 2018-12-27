@@ -78,8 +78,37 @@ public class UserMeta extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		MySQLConnection conn = new MySQLConnection();
+		Double amount = Double.parseDouble(request.getParameter("amount"));
+		String method = request.getParameter("method");
+		String userid = request.getParameter("userid");
+		JSONObject res = new JSONObject();
+		try {
+			if (method.equals("add")) {
+				conn.AddBalance(userid, amount);
+				res.put("result", "success");
+			}
+			else if (method.equals("remove")) {
+				double currentBalance = conn.getUserMeta(userid).get("balance");
+				System.out.println("currentBalance");
+				if (currentBalance < amount) {
+					res.put("result", "failure");
+					RpcHelper.writeJsonObject(response, res);
+					return;
+				}
+				conn.RemoveBalance(userid, amount);
+				res.put("result", "success");
+			}
+			
+			RpcHelper.writeJsonObject(response, res);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			conn.close();
+		}
+		
 	}
 
 }

@@ -29,6 +29,6 @@ button {
 	display:flex;
 }
 
-#username{
+#username, #reload-metadata{
 	display:none;
 }

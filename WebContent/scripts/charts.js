@@ -182,3 +182,7 @@
 		loadUserMetaData();
 		loadDefaultWatchList();
 	}
+	
+	function onChangeMeta(){
+		loadUserMetaData();
+	}
