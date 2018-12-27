@@ -14,25 +14,16 @@ import entity.Item;
 import java.util.*;
 import external.AlphaVantageAPIUtil;
 import entity.Item.ItemBuilder;
-//class MyJSONComparator implements Comparator<JSONObject> {
-//
-//@Override
-//public int compare(JSONObject o1, JSONObject o2) {
-//    String v1 = (String) ((JSONObject) o1.get("attributes")).get("COMMERCIALNAME_E");
-//    String v3 = (String) ((JSONObject) o2.get("attributes")).get("COMMERCIALNAME_E");
-//    return v1.compareTo(v3);
-//}
-//
-//}
+
 public class AlphaVantageAPI {
 	private static final String URL = "https://www.alphavantage.co/query?";
 	private static final String API_KEY =  "8OK2OQMFJ7ATJYOF";
 	private static final String INTRA_DAY = "TIME_SERIES_INTRADAY";
 	private static final String INTERVAL = "1min";
 	private static final String COMPACT_MODE = "compact";
-	private static final String FULL_MODE = "full";
-	private static final String DAILY_ADJUSTED = "TIME_SERIES_DAILY_DAJUSTED";
-	private static final String DEFAULT_ASSET = "MSFT";
+//	private static final String FULL_MODE = "full";
+//	private static final String DAILY_ADJUSTED = "TIME_SERIES_DAILY_DAJUSTED";
+//	private static final String DEFAULT_ASSET = "MSFT";
 	//https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&outputsize=full&apikey=demo
 	public String constructQuery(String asset) {
 		return URL + "function=" + INTRA_DAY + "&symbol=" + asset + "&interval=" + INTERVAL + "&outputsize=" +COMPACT_MODE+ "&apikey=" + API_KEY;
@@ -77,10 +68,10 @@ public class AlphaVantageAPI {
 	
 	public List<Item> getItems(JSONObject obj) {
 		List<Item> res = new ArrayList<>();
-		Iterator<String> keys = obj.keys();
+		Iterator<?> keys = obj.keys();
 		try {
 			while(keys.hasNext()) {
-				String time = keys.next();
+				String time = (String)keys.next();
 				String[] timeInfo = AlphaVantageAPIUtil.parse(time);
 				String date = timeInfo[0];
 				int hour = Integer.parseInt(timeInfo[1]);

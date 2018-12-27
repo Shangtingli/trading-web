@@ -1,7 +1,6 @@
 package rpc;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -49,7 +48,17 @@ public class UserMeta extends HttpServlet {
 			}
 			
 			for (Map.Entry<String, Double> entry : usermeta.entrySet()) {
-				obj2.put(entry.getKey(), entry.getValue());
+				String key = "";
+				if (entry.getKey().equals("total_value")) {
+					key = "Total";
+				}
+				else if (entry.getKey().equals("balance")) {
+					key = "Principal Capital";
+				}
+				else if (entry.getKey().equals("asset_value")) {
+					key = "Portfolio Value";
+				}
+				obj2.put(key, entry.getValue());
 			}
 			System.out.println(usermeta);
 			array.put(obj1);

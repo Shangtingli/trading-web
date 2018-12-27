@@ -58,6 +58,9 @@
     color: aqua;
 }
 
-#assets-holdings li,#balance-and-assets li{
+#balance-and-assets li{
+	font-size: 1.3vw;
+}
+#assets-holdings li{
 	font-size: 1vw;
 }

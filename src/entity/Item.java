@@ -1,5 +1,4 @@
 package entity;
-import java.util.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;

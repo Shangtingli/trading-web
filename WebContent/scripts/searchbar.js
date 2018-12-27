@@ -76,7 +76,7 @@ function showSuggestions(result){
 	    var name = result[symbol];
 		var sugLi = $('<li></li>');
 		sugLi.attr('class','suggestion-item');
-		sugLi.html('<span>' + symbol+ ' : ' + name + '</span>');
+		sugLi.html('<span>' + symbol+ ' : <br>' + name + '</span>');
 	    sugUl.append(sugLi);
 	}
 	

@@ -3,7 +3,6 @@ package db;
 import java.sql.*;
 import java.util.*;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import db.MySQLDBUtil;
