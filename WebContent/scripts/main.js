@@ -1,9 +1,9 @@
 (function(){	
 	function init(){
-		onLogout();
+		onNoLogin();
 	}
     
-	function onLogout(){
+	function onNoLogin(){
 		var register_btn = $("#register-btn");
 		var login_btn = $("#login-btn");
 		var logout_btn = $("#logout-btn");
@@ -38,7 +38,7 @@
 		showElement($("#login-button"));
 		hideElement($('#logout-button'));
 		hideElement($('#welcome-message'));
-		hideElement($('#action-button'));
+		hideElement($('#search-buttons-container'));
 		hideElement($('#search-title'));
 		hideElement($('#search-form'));
 		hideElement($('#ticker-exist-notice'))
