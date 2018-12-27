@@ -1,0 +1,63 @@
+.underlying-asset-chart-container{
+	border: 1px solid white;
+	width: 60vw;
+	height: 90vh;
+}
+
+.asset-chart-container{
+	width: 60vw;
+	height: 60vh;
+	border: 1px solid white
+}
+
+#user-actual-data-container{
+	width: 60vw;
+	height: 30vh;
+	display: flex;
+}
+
+#balance-and-assets{
+	width: 28vw;
+	height: 30vh;
+}
+
+#assets-holdings{
+	width: 28vw;
+	height: 30vh;
+}
+
+.search-bar-container{
+	border: 1px solid white;
+	width: 30vw;
+	height: 90vh;
+}
+#underlying-asset-chart{
+	width: 50vw;
+	height: 80vh;
+}
+#chart-intro{
+	font-weight: 700;
+	font-size: 3vh;
+	margin: auto;
+	text-align: center;
+    width: 40vw;
+}
+
+#user-balance-login-prompt {
+    text-align: center;
+    font-weight: 600;
+}
+
+
+#holdings-section-title-container, #balance-section-title-container {
+    text-align: center;
+}
+#balance-section-title, #holdings-section-title{
+    text-align: center;
+    font-size: 1.5vw;
+    color: aqua;
+}
+
+#assets-holdings li,#balance-and-assets li{
+	font-size: 1vw;
+}

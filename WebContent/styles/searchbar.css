@@ -41,3 +41,8 @@
 	display: none;
 	color: red;
 }
+
+#search-bar-login-prompt p{
+	text-align:center;
+	font-weight: 600;
+}

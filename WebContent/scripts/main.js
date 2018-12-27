@@ -34,10 +34,14 @@
 	}
 	
 	function destroyLogin(){
+		showElement($('#search-bar-login-prompt'));
 		showElement($("#login-button"));
 		hideElement($('#logout-button'));
 		hideElement($('#welcome-message'));
 		hideElement($('#action-button'));
+		hideElement($('#search-title'));
+		hideElement($('#search-form'));
+		hideElement($('#ticker-exist-notice'))
 		$('#username').val('');
 		var url = './price';
     	var params = constructParams($('#username'));

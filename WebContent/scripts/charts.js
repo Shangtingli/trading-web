@@ -8,14 +8,12 @@
     	var promptElement = $('#watchlist-login-prompt');
     	var url = './price';
 		renderElement.html('');
-		debugger;
     	var params = constructParams(refElement);
     	showLoading('Refreshing WatchList',renderElement);
     	var userid = refElement.val();
     	var showButtons = (userid.length > 0);
         var req = JSON.stringify({});
         var query = url + '?' + params;
-        debugger;
         // make AJAX call
         ajax(
            'GET',
@@ -150,13 +148,12 @@
 		ajax('GET',url + '?' + params,req,
 				function(res){
 			var result = JSON.parse(res);
-			debugger;
 			var holdings_container = $('#assets-holdings');
 			var balance_container = $('#balance-and-assets');
 			holdings_container.html('');
 			balance_container.html('');
-			holdings_container.append($('<div> <span>Your Holdings: </span></div>'));
-			balance_container.append($('<div> <span>Your Balance and Assets: </span></div>'))
+			holdings_container.append($('<div id = "holdings-section-title-container"> <span id = "holdings-section-title">Your Holdings: </span></div>'));
+			balance_container.append($('<div id = "balance-section-title-container"> <span id = "balance-section-title">Your Balance and Assets: </span></div>'))
 			var keys1 = Object.keys(result[0]);
 			var list1 = $('<ul></ul>');
 			for (var key of keys1){
@@ -174,7 +171,7 @@
 				list2.append(item);
 			}
 			balance_container.append(list2);
-			
+			balance_container.css('border-right','1.5px solid white');
 
 		},
 		function (e){

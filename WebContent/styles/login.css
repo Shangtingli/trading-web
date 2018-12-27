@@ -8,6 +8,17 @@ p, a, span {
 	color: white;
 }
 
+button {
+	background:linear-gradient( to top right, rgba(29, 193, 45,1) 0%, rgba(29, 193, 45 ,1) 100%);
+    box-shadow: 1px 1px 30px rgba(255,111,0 ,1);
+/*     width: 10vw;
+    height: 3vh; */
+/*     margin-right: 1vw; */
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 #login-error-notice{
 	display: none;
 	color: red;

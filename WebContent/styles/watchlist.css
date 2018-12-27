@@ -1,11 +1,14 @@
 #watchlist-container{
 	width: 20vw;
 	height: 90vh;
-	border: 3px solid white;
+	border: 1px solid white;
 }
 
 #watchlist-login-prompt{
 	display:block;
+	width: 20vw;
+    text-align: center;
+    font-weight: 600;
 }
 
 #watchlist-login{
@@ -34,6 +37,7 @@
 .watchlist-item-container{
 	display:flex;
 	border: 1px solid white;
+	width: 20vw;
 }
 
 .asset-name{
@@ -47,8 +51,9 @@
 }
 
 .remove-from-watchlist-button{
-	width: 8vw;
-	height: 2vh;
+	width: 5vw;
+	height: 4vh;
+	margin-right: 0.5vw;
 }
 
 .add-to-watchlist-button{
