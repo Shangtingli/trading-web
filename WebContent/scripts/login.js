@@ -49,9 +49,9 @@
 	
 	function onSearchBar(){
 		showElement($('#action-button',window.opener.document));
+		showElement($('#search-submit-button',window.opener.document));
 		showElement($('#search-title',window.opener.document));
 		showElement($('#search-form',window.opener.document));
-		showElement($('#search-submit-button',window.opener.document));
 		hideElement($('#search-bar-login-prompt',window.opener.document));
 	}
 	
