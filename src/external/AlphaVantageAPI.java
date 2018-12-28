@@ -72,10 +72,10 @@ public class AlphaVantageAPI {
 		try {
 			while(keys.hasNext()) {
 				String time = (String)keys.next();
-				String[] timeInfo = AlphaVantageAPIUtil.parse(time);
-				String date = timeInfo[0];
-				int hour = Integer.parseInt(timeInfo[1]);
-				int minute = Integer.parseInt(timeInfo[2]);
+//				String[] timeInfo = AlphaVantageAPIUtil.parse(time);
+//				String date = timeInfo[0];
+//				int hour = Integer.parseInt(timeInfo[1]);
+//				int minute = Integer.parseInt(timeInfo[2]);
 				JSONObject tempObject = obj.getJSONObject(time);
 				ItemBuilder builder = new ItemBuilder();
 				String open = tempObject.getString("1. open");
@@ -89,9 +89,7 @@ public class AlphaVantageAPI {
 				String volume = tempObject.getString("5. volume");
 				builder.setVolume(Double.parseDouble(volume));
 				//Time information
-				builder.setDate(date);
-				builder.setHour(hour);
-				builder.setMinute(minute);
+				builder.setTime(time);
 				Item item = new Item(builder);
 				res.add(item);
 			}
@@ -102,12 +100,28 @@ public class AlphaVantageAPI {
 		Collections.sort(res,new Comparator<Item>(){
 			   @Override
 			   public int compare(Item i1,Item i2) {
-				   if (i1.getHour() != i2.getHour()) {
-					   return (i1.getHour() - i2.getHour());
+				   String t1 = i1.getTime();
+				   String t2 = i2.getTime();
+				   String[] timeInfo1 = AlphaVantageAPIUtil.parse(t1);
+				   String[] timeInfo2 = AlphaVantageAPIUtil.parse(t2);
+				   String date1 = timeInfo1[0];
+				   int hour1 = Integer.parseInt(timeInfo1[1]);
+				   int minute1 = Integer.parseInt(timeInfo1[2]);
+				   String date2 = timeInfo2[0];
+				   int hour2 = Integer.parseInt(timeInfo2[1]);
+				   int minute2 = Integer.parseInt(timeInfo2[2]);
+				   if (hour1 != hour2) {
+					   return hour1 - hour2;
 				   }
 				   else {
-					   return (i1.getMinute() - i2.getMinute());
+					   return minute1-minute2;
 				   }
+//				   if (i1.getHour() != i2.getHour()) {
+//					   return (i1.getHour() - i2.getHour());
+//				   }
+//				   else {
+//					   return (i1.getMinute() - i2.getMinute());
+//				   }
 			   }
 
 		});

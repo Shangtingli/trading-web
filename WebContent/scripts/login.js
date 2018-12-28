@@ -12,6 +12,7 @@
 		var url = '../login';
 		var params = 'userid=' + username + '&password=' + password;
 		var req = JSON.stringify({});
+		debugger;
 		ajax('GET', url + '?' + params, req,
 		function(res) {
 			var result = JSON.parse(res);

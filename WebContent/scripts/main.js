@@ -26,11 +26,12 @@
 			showActionPopUp();
 		});
 		initSearchBar();
+		initBalanceChart();
 		showElement($('#user-balance-login-prompt'));
-		first_call_loadDefaultWatchList();
+		first_call_loadWatchList();
 		var time = undefined;
 		if (time !== undefined)
-		{var timeInt = setInterval(loadDefaultWatchList,time*1000);}
+		{var timeInt = setInterval(loadWatchList,time*1000);}
 	}
 	
 	function destroyLogin(){
@@ -53,7 +54,7 @@
 			'</div> ' + 
 			'<div id = "assets-holdings">' +		
 			'</div></div>');
-		loadDefaultWatchList();
+		loadWatchList();
 	}
     window.onload = init;
 })();

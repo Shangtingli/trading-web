@@ -64,3 +64,10 @@
 #assets-holdings li{
 	font-size: 1vw;
 }
+
+#total-value-chart{
+	width: 58vw;
+	height: 55vh;
+	margin-left: 1vw;
+	margin-top: 1vh;
+}

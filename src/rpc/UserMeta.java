@@ -2,6 +2,7 @@ package rpc;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,7 +45,8 @@ public class UserMeta extends HttpServlet {
 			Map<String,Double> holdings = conn.getHoldings(userid);
 			Map<String,Double> usermeta = conn.getUserMeta(userid);
 			for (Map.Entry<String, Double> entry : holdings.entrySet()) {
-				obj1.put(entry.getKey(),entry.getValue().toString());
+				double value = (double)Math.round(entry.getValue() * 100d) / 100d;
+				obj1.put(entry.getKey(),Double.toString(value));
 			}
 			
 			for (Map.Entry<String, Double> entry : usermeta.entrySet()) {
@@ -58,7 +60,8 @@ public class UserMeta extends HttpServlet {
 				else if (entry.getKey().equals("asset_value")) {
 					key = "Portfolio Value";
 				}
-				obj2.put(key, entry.getValue().toString());
+				double value = (double)Math.round(entry.getValue() * 100d) / 100d;
+				obj2.put(key, Double.toString(value));
 			}
 			System.out.println(usermeta);
 			array.put(obj1);

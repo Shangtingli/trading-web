@@ -508,6 +508,23 @@ public class MySQLConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * 
+	 */
+	public List<Item> getAllPrices(String asset,int interval){
+		AlphaVantageAPI api = new AlphaVantageAPI();
+		List<Item> items = api.getItems(api.getResponse(asset));
+		List<Item> res = new ArrayList<Item>();
+		for (int i=0; i < items.size();i++) {
+			if ((i+1) % interval == 0) {
+				res.add(items.get(i));
+			}
+		}
+		
+		return res;
+		
+	}
 	/*
 	 * MAIN
 	 */

@@ -1,34 +1,3 @@
-//	function $(tag, options) {
-//        if (!options) {
-//            return document.getElementById(tag);
-//        }
-//
-//        var element = document.createElement(tag);
-//
-//        for (var option in options) {
-//            if (options.hasOwnProperty(option)) {
-//                element[option] = options[option];
-//            }
-//        }
-//
-//        return element;
-//    }
-	
-//	function $$(tag, options) {
-//        if (!options) {
-//            return window.opener.document.getElementById(tag);
-//        }
-//
-//        var element = window.opener.document.createElement(tag);
-//
-//        for (var option in options) {
-//            if (options.hasOwnProperty(option)) {
-//                element[option] = options[option];
-//            }
-//        }
-//
-//        return element;
-//    }
 	function showElement(element){
         element.css("display","block");
     }

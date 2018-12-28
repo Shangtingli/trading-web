@@ -70,7 +70,8 @@ public class Price extends HttpServlet {
 				if (items.size() > 0) {
 					double price = items.get(items.size()-1).getOpen();
 					double initPrice = items.get(0).getOpen();
-		   			obj.put("asset",asset).put("price", Double.toString(price));
+					double price_formatted = (double)Math.round(price * 100d) / 100d;
+		   			obj.put("asset",asset).put("price", Double.toString(price_formatted));
 		   			double diff = price-initPrice;
 		   			if (Math.abs(diff) < 0.001) {
 		   				obj.put("trend", "neutral");
@@ -111,7 +112,8 @@ public class Price extends HttpServlet {
 				if (items.size() > 0) {
 					double price = items.get(items.size()-1).getOpen();
 					double initPrice = items.get(0).getOpen();
-		   			obj.put("asset",asset).put("price", Double.toString(price));
+					double price_formatted = (double)Math.round(price * 100d) / 100d;
+		   			obj.put("asset",asset).put("price", Double.toString(price_formatted));
 		   			double diff = price-initPrice;
 		   			if (Math.abs(diff) < 0.001) {
 		   				obj.put("trend", "neutral");

@@ -39,7 +39,7 @@ function addtoWatchList(){
 			},false);
 	if (success)
 	{
-		loadDefaultWatchList();
+		loadWatchList();
 	}
 }
 

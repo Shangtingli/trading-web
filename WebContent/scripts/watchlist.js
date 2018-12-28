@@ -1,8 +1,8 @@
-    function first_call_loadDefaultWatchList(){
-    	loadDefaultWatchList();
+    function first_call_loadWatchList(){
+    	loadWatchList();
     }
     
-    function loadDefaultWatchList(){
+    function loadWatchList(){
     	var renderElement = $('#watchlist-login');
     	var refElement = $('#username');
     	var promptElement = $('#watchlist-login-prompt');
@@ -54,33 +54,7 @@
 				function() {
 					console.log("Something is Wrong");
 				},false);
-		loadDefaultWatchList();
-	}
-	
-	function initBalanceChart(){
-	    var trace1 = {
-	    		  x: [1, 2, 3, 4],
-	    		  y: [10, 15, 13, 17],
-	    		  mode: 'markers'
-	    		};
-
-	    		var trace2 = {
-	    		  x: [2, 3, 4, 5],
-	    		  y: [16, 5, 11, 10],
-	    		  mode: 'lines'
-	    		};
-
-	    		var trace3 = {
-	    		  x: [1, 2, 3, 4],
-	    		  y: [12, 9, 15, 12],
-	    		  mode: 'lines+markers'
-	    		};
-
-	    		var data = [ trace1, trace2, trace3 ];
-
-	    		var layout = {};
-
-	    		Plotly.newPlot('underlying-asset-chart', data, layout, {showSendToCloud: true});
+		loadWatchList();
 	}
 	
 	function showPrice(results,renderElement,promptElement,showButtons) {
@@ -141,48 +115,7 @@
 		})
 	}
 	
-	function loadUserMetaData(){
-		var url = './usermeta';
-		var params = 'userid=' + $('#username').val();
-		var req = JSON.stringify({});
-		ajax('GET',url + '?' + params,req,
-				function(res){
-			var result = JSON.parse(res);
-			var holdings_container = $('#assets-holdings');
-			var balance_container = $('#balance-and-assets');
-			holdings_container.html('');
-			balance_container.html('');
-			holdings_container.append($('<div id = "holdings-section-title-container"> <span id = "holdings-section-title">Your Holdings: </span></div>'));
-			balance_container.append($('<div id = "balance-section-title-container"> <span id = "balance-section-title">Your Balance and Assets: </span></div>'))
-			var keys1 = Object.keys(result[0]);
-			var list1 = $('<ul></ul>');
-			for (var key of keys1){
-				var item = $('<li></li>');
-				item.html(key + ' : ' + result[0][key]);
-				list1.append(item);
-			}
-			holdings_container.append(list1);
-			hideElement($('#user-balance-login-prompt'));
-			var keys2 = Object.keys(result[1]);
-			var list2 = $('<ul></ul>');
-			for (var key of keys2){
-				var item = $('<li></li>');
-				item.html(key + ' : ' + result[1][key]);
-				list2.append(item);
-			}
-			balance_container.append(list2);
-			balance_container.css('border-right','1.5px solid white');
-
-		},
-		function (e){
-			console.log("Something went wrong")
-		},false)
-	}
 	function onChangeUserId(){
 		loadUserMetaData();
-		loadDefaultWatchList();
-	}
-	
-	function onChangeMeta(){
-		loadUserMetaData();
+		loadWatchList();
 	}
