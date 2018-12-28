@@ -10,4 +10,5 @@ public class MySQLDBUtil {
 			+ HOSTNAME + ":" + PORT_NUM + "/" + DB_NAME
 			+ "?user=" + USERNAME + "&password=" + PASSWORD
 			+ "&autoReconnect=true&serverTimezone=UTC";
+	
 }

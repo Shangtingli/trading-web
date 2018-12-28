@@ -39,8 +39,6 @@ public class AlphaVantageAPI {
 			HttpURLConnection connection = (HttpURLConnection) new URL(query).openConnection();
 			connection.setRequestMethod("GET");
 			int responseCode = connection.getResponseCode();
-			System.out.println("Sending 'GET' Request to URL:"+URL);
-			System.out.println("Response Code: " + responseCode);
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Response is an input with regard to client, output with regard to server
 			//BufferedReader is used to prevent if the stream is very big

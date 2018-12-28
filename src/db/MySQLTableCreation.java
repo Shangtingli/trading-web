@@ -1,16 +1,40 @@
 package db;
 
-import java.sql.DriverManager;
-import java.sql.Statement;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.sql.*;
+import java.util.*;
 import db.MySQLDBUtil;
-
+import external.AlphaVantageAPI;
 import java.sql.Connection;
 
 public class MySQLTableCreation {
+	public static List<String> getPermutation(String[] alphabet, int length){
+		List<String> res = new ArrayList<>();
+		for (int i=1; i <=length; i++) {
+			List<String> array = new ArrayList<>();
+			backtrack(alphabet, "", i, array);
+			res.addAll(array);
+		}
+		
+		return res;
+	}
+	
+	public static void backtrack(String[] alphabet, String curr, int length, List<String> output){
+		if (curr.length() == length) {
+			output.add(curr);
+			return;
+		}
+		
+		for(int i=0; i < alphabet.length; i++) {
+			curr += alphabet[i];
+			backtrack(alphabet, curr, length, output);
+			curr = curr.substring(0, curr.length() - 1);
+		}
+	}
 	public static void main(String[] args) {
 		try {
-			System.out.println("Connecting to " + MySQLDBUtil.URL);
 			Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
 			Connection conn = DriverManager.getConnection(MySQLDBUtil.URL);
 			if (conn == null) {
@@ -74,6 +98,34 @@ public class MySQLTableCreation {
 					+ ")";
 			statement.executeUpdate(sql);
 			
+			
+//			sql = "DROP TABLE IF EXISTS tickers";
+//			statement.executeUpdate(sql);
+//			sql = "CREATE TABLE tickers ("
+//					+ "symbol VARCHAR(255) NOT NULL,"
+//					+ "name VARCHAR(255) NOT NULL"
+//					+ "PRIMARY KEY (symbol)"
+//					+ ")";
+//			statement.executeUpdate(sql);
+//			String[] alphabet = new String[] {
+//			"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+//			};
+//			List<String> fragments = getPermutation(alphabet, 2);
+//			String left = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
+//			String right = "&apikey=demo";
+//			for (String fragment : fragments) {
+//				String endpoint = left + fragment + right;
+//				HttpURLConnection connection = (HttpURLConnection) new URL(endpoint).openConnection();
+//				connection.setRequestMethod("GET");
+//				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//				StringBuilder response =  new StringBuilder();
+//				String inputLine;
+//				while ((inputLine =in.readLine()) != null)
+//				{
+//					response.append(inputLine);
+//				}
+//				in.close();
+//			}
 			System.out.println("DataBase Creation Complete");
 		}
 		
@@ -81,4 +133,5 @@ public class MySQLTableCreation {
 			e.printStackTrace();
 		}
 	}
+	
 }

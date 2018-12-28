@@ -1,0 +1,14 @@
+1. The WatchList Could only be Removed when you add at least one item to the watch list
+	(OnChange might fix the problem)
+	(Solved: Using JQuery Instead)
+
+2. The ajax webpage calls itself
+	(Solved: make sure you add e.preventDefault() at every listener event)
+
+3. Suggestions: When you refresh watch list just refresh the price and trend icon
+
+4. Use Continuation Graph for the main chart. I mean, the chart that accepts data and then render new data points on the canvas. Might need to create new database related to user metadata and time.
+
+5. Also need to find out how to create the database for tickers such that all tickers are in the AlphaVantage API.
+
+6. Also Tell the user if a ticker does not exist
