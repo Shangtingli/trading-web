@@ -297,20 +297,29 @@ public class MySQLConnection {
 			}
 			
 			/*
-			 * Then Update Balance and Asset value
+			 * Then Update Balance and Asset Value
 			 */
+			List<String> portfolio = new ArrayList<>(getHoldings(userid).keySet());
+			double asset_value = 0.0;
+			for (String asset : portfolio) {
+				//Get all the newest price from the api and calculate the new balance of users
+				List<Item> asset_values = api.getItems(api.getResponse(asset));
+				int length = asset_values.size();
+				double newestPrice = asset_values.get(length-1).getOpen();
+				double pos = getPosition(userid, asset);
+				asset_value += newestPrice * pos;
+			}
 			if (balanceChanged > 0) {
-				sql = "UPDATE users SET balance = balance - ?, asset_value = asset_value + ? WHERE user_id = ?";
+				sql = "UPDATE users SET balance = balance - ?, asset_value = ?, total_value = ? + balance WHERE user_id = ?";
 			}
 			else {
-				sql = "UPDATE users SET balance = balance + ?, asset_value = asset_value - ? WHERE user_id = ?";
+				sql = "UPDATE users SET balance = balance + ?, asset_value = ?, total_value = ? + balance WHERE user_id = ?";
 			}
 			pStatement = conn.prepareStatement(sql);
 			pStatement.setDouble(1, Math.abs(balanceChanged));
-			pStatement.setDouble(2, Math.abs(balanceChanged));
-			pStatement.setString(3, userid);
-			System.out.println("Update Balance Statement");
-			System.out.println(pStatement.toString());
+			pStatement.setDouble(2, asset_value);
+			pStatement.setDouble(3, asset_value);
+			pStatement.setString(4, userid);
 			pStatement.execute();
 			res.put("result", "success");
 			return res;
@@ -320,7 +329,6 @@ public class MySQLConnection {
 		
 		return res;
 	}
-	
 	
 	/*
 	 * Update done when stock price is updated 
@@ -381,7 +389,9 @@ public class MySQLConnection {
 		}
 		
 	}
-	
+	/*
+	 * Remove Balance through external injection
+	 */
 	public void RemoveBalance(String userid, double amount) {
 		try {
 			String sql = "UPDATE users SET balance = balance - ?, total_value = total_value - ? WHERE user_id = ?";
@@ -509,7 +519,7 @@ public class MySQLConnection {
 	}
 	
 	/*
-	 * 
+	 *  Get prices of the asset specified by minute intervals
 	 */
 	public List<Item> getAllPrices(String asset,int interval){
 		AlphaVantageAPI api = new AlphaVantageAPI();
