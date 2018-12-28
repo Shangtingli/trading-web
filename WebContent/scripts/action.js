@@ -40,15 +40,18 @@
 		else if (preCheck === 'invalid'){
 			$('#change-balance-notice').html(
 					'<span class = "invalid-input-notice"> ' +
-					'Only numbers and . are allowed' + 
+					'Only positive numbers and . are allowed' + 
 					'</span>'
 			);
 			$('input').val('');
 			return;
 		}
+		$('#change-balance-notice').html('');
+		showLoading('Adding Balance...',$('#change-balance-notice'));
 		ajax('POST', url + '?' + params, req,
 				function(res){
 					var result = JSON.parse(res);
+					$('input').val('');
 					if (result.result === 'failure'){
 						$('#change-balance-notice').html(
 								'<span id = "change-balance-failure-notice">'+
@@ -57,6 +60,7 @@
 								'which exceeds current balance.' + 
 								'</span>'
 						);
+						$('#reload-metadata',window.opener.document).triggerHandler('change');
 						return;
 					}
 					else{
@@ -70,9 +74,7 @@
 				},
 				function(e){
 					console.log("Something is Wrong");
-				},false);
-		$('input').val('');
-		$('#reload-metadata',window.opener.document).triggerHandler('change');
+				});
 	}
 	function onTransacton(method){
 		var amount = $('#stock-amount-input').val();
@@ -94,16 +96,18 @@
 		else if (preCheck === 'invalid'){
 			$('#long-short-notice').html(
 					'<span class = "invalid-input-notice"> ' +
-					'Only numbers and . are allowed' + 
+					'Only poritive numbers and . are allowed' + 
 					'</span>'
 			);
 			$('input').val('');
 			return;
 		}
-		
+		$('#long-short-notice').html('');
+		showLoading('Submitting Transaction...',$('#long-short-notice'));
 		ajax('POST', url + '?' + params, req,
 				function(res){
 					var result = JSON.parse(res);
+					$('input').val('');
 					if (result.result === 'failure'){
 						if (result.reason === 'symbol'){
 							$('#long-short-notice').html(
@@ -128,15 +132,13 @@
 								'Transaction Successful'	+
 								'</span>'
 						);
+						$('#reload-metadata',window.opener.document).triggerHandler('change');
 						
 					}
 				},
 				function(e){
 					console.log("Something is Wrong");
-				},false);
-		
-		$('input').val('');
-		$('#reload-metadata',window.opener.document).triggerHandler('change');
+				});
 	}
 	
 	function onClickShort(){
@@ -158,7 +160,7 @@
 		if (amount.length === 0){
 			return 'empty';
 		}
-		if (isNaN(parseFloat(amount))){
+		if (isNaN(amount) || parseFloat(amount) === 0.0){
 			return 'invalid';
 		}
 		

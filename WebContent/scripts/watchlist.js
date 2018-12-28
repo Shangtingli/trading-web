@@ -97,15 +97,6 @@
 		}
 	}
 	
-	function showLoading(msg,loadingElement){
-		var blk = $('<div></div>');
-		blk.attr('class','loading-container');
-		blk.html('<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' +
-        msg + '</p>');
-		
-		loadingElement.append(blk);
-	}
-	
 	function addRemoveListeners(){
 		var elements = $('.remove-from-watchlist-button');
 		elements.on('click',function(e){

@@ -86,7 +86,7 @@
 						},
 						title: 'Total Value Change Chart'
 					};
-					Plotly.newPlot('total-value-chart', data, layout, {showSendToCloud: true});
+					Plotly.newPlot('total-value-chart', data, layout, {displayModeBar: false});
 				},
 				function(e){
 					console.log("Something is Wrong!!!");

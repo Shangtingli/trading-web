@@ -80,4 +80,15 @@
     	return params;
     }
     
+    
+	
+	function showLoading(msg,loadingElement){
+		var blk = $('<div></div>');
+		blk.attr('class','loading-container');
+		blk.html('<p class="notice"><i class="fa fa-spinner fa-spin"></i> ' + '<span>' +
+        msg + '</span></p>');
+		
+		loadingElement.append(blk);
+		debugger;
+	}
    

@@ -3,7 +3,7 @@ body,html{
 	margin: 0px;
 	padding: 0px;
 }
-a, span, p{
+a, span, p， i{
 	color: white;
 }
 
@@ -63,5 +63,12 @@ input {
 	margin-top: 5vh;
 }
 
+#long-short-success-notice{
+	color: yellow;
+}
+
+.fa-spin{
+	color:white;
+}
 
 
