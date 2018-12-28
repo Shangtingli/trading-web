@@ -40,7 +40,7 @@
 		loadUserMetaData();
 	}
 	
-	function initBalanceChart(){
+	function loadChart(){
 		var userid = $('#username').val()
 		var interval = '1';
 		var url = './chart';
@@ -139,6 +139,5 @@
 		for (let i=0; i < array.length; i++){
 			array[i] += capital;
 		}
-		debugger;
 		return array;
 	}

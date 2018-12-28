@@ -109,5 +109,5 @@
 	function onChangeUserId(){
 		loadUserMetaData();
 		loadWatchList();
-		initBalanceChart();
+		loadChart();
 	}

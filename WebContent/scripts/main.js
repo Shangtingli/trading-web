@@ -26,7 +26,7 @@
 			showActionPopUp();
 		});
 		initSearchBar();
-		initBalanceChart();
+		loadChart();
 		showElement($('#user-balance-login-prompt'));
 		first_call_loadWatchList();
 		var time = undefined;
@@ -55,7 +55,7 @@
 			'<div id = "assets-holdings">' +		
 			'</div></div>');
 		loadWatchList();
-		initBalanceChart();
+		loadChart();
 	}
     window.onload = init;
 })();
