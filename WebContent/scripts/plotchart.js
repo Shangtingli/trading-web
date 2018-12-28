@@ -81,11 +81,23 @@
 					var trace1 = {
 							x: x_array,
 							y: y_array,
-							mode: 'lines+markers'
+							mode: 'lines+markers',
+							marker: {
+							    color: 'rgb(255, 0, 0)',
+							    size: 8
+							  },
+							line: {
+								color: 'rgb(0, 97, 255)',
+								width: 3
+							}
 					};
 					var data = [trace1];
 					var layout = {
 							  title: title_text,
+							  titlefont:{
+								  size: 27,
+								  family: 'Times New Roman'
+							  },
 							  xaxis: {
 							    title: x_title,
 							    titlefont: {

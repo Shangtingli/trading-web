@@ -68,11 +68,11 @@
 			var text = $('<p></p>');
 			text.attr('class','watchlist-item');
 			if (trend === 'up'){
-				var trend_icon = $('<img src= "assets/uparrow.png">');
+				var trend_icon = $('<img src= "assets/up-arrow.svg">');
 				trend_icon.attr('class','trend-icon');
 			}
 			else if (trend === 'down'){
-				var trend_icon = $('<img src= "assets/downarrow.png">');
+				var trend_icon = $('<img src= "assets/down-arrow.svg">');
 				trend_icon.attr('class','trend-icon');
 			}
 			else{
