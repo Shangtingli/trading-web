@@ -3,10 +3,12 @@ package db;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.*;
 import java.util.*;
 import db.MySQLDBUtil;
 import external.AlphaVantageAPI;
+
 import java.sql.Connection;
 
 public class MySQLTableCreation {
@@ -37,6 +39,7 @@ public class MySQLTableCreation {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
 			Connection conn = DriverManager.getConnection(MySQLDBUtil.URL);
+			AlphaVantageAPI api = new AlphaVantageAPI();
 			if (conn == null) {
 				System.out.println("Connection on SQL is null");
 				return;
@@ -99,34 +102,30 @@ public class MySQLTableCreation {
 			statement.executeUpdate(sql);
 			
 			
-//			sql = "DROP TABLE IF EXISTS tickers";
-//			statement.executeUpdate(sql);
-//			sql = "CREATE TABLE tickers ("
-//					+ "symbol VARCHAR(255) NOT NULL,"
-//					+ "name VARCHAR(255) NOT NULL"
-//					+ "PRIMARY KEY (symbol)"
-//					+ ")";
-//			statement.executeUpdate(sql);
-//			String[] alphabet = new String[] {
-//			"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
-//			};
-//			List<String> fragments = getPermutation(alphabet, 2);
-//			String left = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=";
-//			String right = "&apikey=demo";
-//			for (String fragment : fragments) {
-//				String endpoint = left + fragment + right;
-//				HttpURLConnection connection = (HttpURLConnection) new URL(endpoint).openConnection();
-//				connection.setRequestMethod("GET");
-//				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//				StringBuilder response =  new StringBuilder();
-//				String inputLine;
-//				while ((inputLine =in.readLine()) != null)
-//				{
-//					response.append(inputLine);
-//				}
-//				in.close();
-//			}
+			sql = "DROP TABLE IF EXISTS tickers";
+			statement.executeUpdate(sql);
+			sql = "CREATE TABLE tickers ("
+					+ "symbol VARCHAR(255) NOT NULL,"
+					+ "name VARCHAR(255) NOT NULL,"
+					+ "PRIMARY KEY (symbol)"
+					+ ")";
+			statement.executeUpdate(sql);
+			String[] alphabet = new String[] {
+			"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+			};
+			List<String> fragments = getPermutation(alphabet, 2);
+			HashMap<String, String> tickerInfo = api.getAllSymbols(fragments);
+			for (Map.Entry<String, String> entry : tickerInfo.entrySet()) {
+				String symbol = entry.getKey();
+				String name = entry.getValue();
+				sql = "INSERT INTO tickers(symbol, name) VALUES(?,?)";
+				PreparedStatement pStatement = conn.prepareStatement(sql);
+				pStatement.setString(1, symbol);
+				pStatement.setString(2, name);
+				pStatement.execute();
+			}
 			System.out.println("DataBase Creation Complete");
+			
 		}
 		
 		catch (Exception e){

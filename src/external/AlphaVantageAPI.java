@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection; 
 import java.net.URL;
-
+import java.util.concurrent.TimeUnit;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import entity.Item;
 
@@ -19,26 +19,25 @@ public class AlphaVantageAPI {
 	private static final String URL = "https://www.alphavantage.co/query?";
 	private static final String API_KEY =  "8OK2OQMFJ7ATJYOF";
 	private static final String INTRA_DAY = "TIME_SERIES_INTRADAY";
+	private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
 	private static final String INTERVAL = "1min";
 	private static final String COMPACT_MODE = "compact";
-//	private static final String FULL_MODE = "full";
-//	private static final String DAILY_ADJUSTED = "TIME_SERIES_DAILY_DAJUSTED";
-//	private static final String DEFAULT_ASSET = "MSFT";
-	//https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&outputsize=full&apikey=demo
-	public String constructQuery(String asset) {
-		return URL + "function=" + INTRA_DAY + "&symbol=" + asset + "&interval=" + INTERVAL + "&outputsize=" +COMPACT_MODE+ "&apikey=" + API_KEY;
-	}
-	
-	public JSONObject getResponse(String asset) {
+//https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=xiaomi&apikey=demo
+	public String constructAssetQuery(String asset) {
 		if (asset == null || asset.length() == 0) {
 			asset = "MSFT";
 		}
-		String query = constructQuery(asset);
+		return URL + "function=" + INTRA_DAY + "&symbol=" + asset + "&interval=" + INTERVAL + "&outputsize=" +COMPACT_MODE+ "&apikey=" + API_KEY;
+	}
+	
+	public String constructSymbolsQuery(String fragment) {
+		return URL + "function=" + SYMBOL_SEARCH + "&keywords=" + fragment + "&apikey=" + API_KEY;
+	}
+	public JSONObject getResponse(String query) {
 		System.out.println(query);
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(query).openConnection();
 			connection.setRequestMethod("GET");
-			int responseCode = connection.getResponseCode();
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Response is an input with regard to client, output with regard to server
 			//BufferedReader is used to prevent if the stream is very big
@@ -51,12 +50,7 @@ public class AlphaVantageAPI {
 			}
 			in.close();
 			JSONObject obj = new JSONObject(response.toString());
-			String metaKey = "Time Series (" + INTERVAL + ")";
-			if (!obj.isNull(metaKey))
-			{
-				JSONObject timeSeries = obj.getJSONObject(metaKey);
-				return timeSeries;
-			}
+			return obj;
 		}
 		catch (Exception e) {
 			System.out.println("Something is Wrong with the getResponse Method");
@@ -64,10 +58,14 @@ public class AlphaVantageAPI {
 		return new JSONObject();
 	}
 	
-	public List<Item> getItems(JSONObject obj) {
+	public List<Item> getItems(JSONObject object) {
+		System.out.println(object);
+		String metaKey = "Time Series (" + INTERVAL + ")";
 		List<Item> res = new ArrayList<>();
-		Iterator<?> keys = obj.keys();
+		
 		try {
+			JSONObject obj = object.getJSONObject(metaKey);
+			Iterator<?> keys = obj.keys();
 			while(keys.hasNext()) {
 				String time = (String)keys.next();
 //				String[] timeInfo = AlphaVantageAPIUtil.parse(time);
@@ -102,10 +100,8 @@ public class AlphaVantageAPI {
 				   String t2 = i2.getTime();
 				   String[] timeInfo1 = AlphaVantageAPIUtil.parse(t1);
 				   String[] timeInfo2 = AlphaVantageAPIUtil.parse(t2);
-				   String date1 = timeInfo1[0];
 				   int hour1 = Integer.parseInt(timeInfo1[1]);
 				   int minute1 = Integer.parseInt(timeInfo1[2]);
-				   String date2 = timeInfo2[0];
 				   int hour2 = Integer.parseInt(timeInfo2[1]);
 				   int minute2 = Integer.parseInt(timeInfo2[2]);
 				   if (hour1 != hour2) {
@@ -126,11 +122,49 @@ public class AlphaVantageAPI {
 		return res;
 	}
 	
+	public HashMap<String, String> getAllSymbols(List<String> permutations) {
+		HashMap<String, String> symbolInfo = new HashMap<>();
+		String metaKey = "bestMatches";
+		try {
+			int count = 0;
+			for (String fragment: permutations) {
+				count ++;
+				String query = constructSymbolsQuery(fragment);
+				JSONObject result= getResponse(query);
+				JSONArray array = result.getJSONArray(metaKey);
+				for (int i=0 ; i < array.length(); i++) {
+					JSONObject info = array.getJSONObject(i);
+					String symbol = info.getString("1. symbol");
+					String name = info.getString("2. name");
+					symbolInfo.put(symbol, name);
+				}
+				if (count % 25 == 0) {
+					System.out.println("Sleeping for 1 minute wait for API...");
+					TimeUnit.MINUTES.sleep(1);
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return symbolInfo;
+	}
 	
 	public static void main(String[] args) {
 		AlphaVantageAPI test = new AlphaVantageAPI();
-		JSONObject dummy = test.getResponse("ADADADA");
-		System.out.println(dummy.length());
+		for (int i=0; i < 10; i++) {
+			System.out.println(i);
+			if (i % 4 == 0) {
+				try {
+					TimeUnit.SECONDS.sleep(10);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 }
 

@@ -65,7 +65,7 @@ public class Price extends HttpServlet {
 					continue;
 				}
 				String asset = entry.getValue()[0];
-				List<Item> items = api.getItems(api.getResponse(asset));
+				List<Item> items = api.getItems(api.getResponse(api.constructAssetQuery(asset)));
 				JSONObject obj = new JSONObject();
 				if (items.size() > 0) {
 					double price = items.get(items.size()-1).getOpen();
@@ -107,7 +107,7 @@ public class Price extends HttpServlet {
 			AlphaVantageAPI api = new AlphaVantageAPI();
 			for (String asset : watchlists) {
 				System.out.println(asset);
-				List<Item> items = api.getItems(api.getResponse(asset));
+				List<Item> items = api.getItems(api.getResponse(api.constructAssetQuery(asset)));
 				JSONObject obj = new JSONObject();
 				if (items.size() > 0) {
 					double price = items.get(items.size()-1).getOpen();

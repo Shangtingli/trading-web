@@ -238,16 +238,14 @@ public class MySQLConnection {
 		try {
 			double position = getPosition(userid, symbol);
 			action_id ++ ;
-			JSONObject response = api.getResponse(symbol);
-
-			if (response.length() ==0) {
+			JSONObject response = api.getResponse(api.constructAssetQuery(symbol));
+			List<Item> records = api.getItems(response); 
+			int len = records.size();
+			if (len ==0) {
 				System.out.println("The Action you sent does not work, either because of API Restriction or the symbol does not exist");
 				res.put("result", "failure").put("reason","symbol");
 				return res;
 			}
-			
-			List<Item> records = api.getItems(response); 
-			int len = records.size();
 			double price = records.get(len-1).getOpen();
 			double balanceChanged = (action.equals("buy")) ? (price * amount):(- price * amount);
 			Map<String, Double> metadata = getUserMeta(userid);
@@ -303,7 +301,7 @@ public class MySQLConnection {
 			double asset_value = 0.0;
 			for (String asset : portfolio) {
 				//Get all the newest price from the api and calculate the new balance of users
-				List<Item> asset_values = api.getItems(api.getResponse(asset));
+				List<Item> asset_values = api.getItems(api.getResponse(api.constructAssetQuery(asset)));
 				int length = asset_values.size();
 				double newestPrice = asset_values.get(length-1).getOpen();
 				double pos = getPosition(userid, asset);
@@ -346,7 +344,7 @@ public class MySQLConnection {
 		
 		for (String asset : portfolio) {
 			//Get all the newest price from the api and calculate the new balance of users
-			List<Item> records = api.getItems(api.getResponse(asset));
+			List<Item> records = api.getItems(api.getResponse(api.constructAssetQuery(asset)));
 			if (records.size () ==0) {
 				System.out.println("The Action you sent does not work because of fucking API Restrictions");
 				return;
@@ -523,7 +521,7 @@ public class MySQLConnection {
 	 */
 	public List<Item> getAllPrices(String asset,int interval){
 		AlphaVantageAPI api = new AlphaVantageAPI();
-		List<Item> items = api.getItems(api.getResponse(asset));
+		List<Item> items = api.getItems(api.getResponse(api.constructAssetQuery(asset)));
 		List<Item> res = new ArrayList<Item>();
 		for (int i=0; i < items.size();i++) {
 			if ((i+1) % interval == 0) {
