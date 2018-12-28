@@ -45,14 +45,17 @@
 		var interval = '1';
 		var url = './chart';
 		var params = 'userid=' + userid + '&interval=' + interval;
-		for (let i =0; i < DEFAULT_PORTFOLIO.length; i++){
-			var asset = DEFAULT_PORTFOLIO[i];
-			params += '&asset' + i.toString() + '=' + asset;
+		if (userid.length ===0)
+		{
+			for (let i =0; i < DEFAULT_PORTFOLIO.length; i++){
+				var asset = DEFAULT_PORTFOLIO[i];
+				params += '&asset' + i.toString() + '=' + asset;
+			}
 		}
 		var req = JSON.stringify({});
 		var user = (userid.length===0) ? ('Default Portfolio'):(userid) ;
 		var title_text = 'Total Value Change Chart For '+ user;
-		showLoading('Loading User Metadata...', $('#total-value-chart'));
+		showLoading('Loading User\'s Chart...', $('#total-value-chart'));
 		ajax('GET', url + '?' + params, req,
 				function(res){
 					$('#total-value-chart').html('');
@@ -100,11 +103,11 @@
 	}
 	
 	function calculateWorth(result){
-		if (result.length === 0){
+		if (result.length === 1){
 			var array = [];
 			array.length = 100;
 			for (let i =0; i< array.length; i++){
-				array[i] = 0;
+				array[i] = result[0]['capital'];
 			}
 			return array;
 		}
@@ -112,11 +115,12 @@
 		var first_asset = result[0];
 		var len = first_asset[Object.keys(first_asset)[0]].length;
 		var array = [];
+		var capital = (userid.length ===0 ) ? (0): (parseFloat(result[result.length-1]['capital']));
 		array.length = len;
 		for (let i =0; i< array.length; i++){
 			array[i] = 0;
 		}
-		for (let j= 0; j < result.length; j++){
+		for (let j= 0; j < result.length - 1; j++){
 			var asset = result[j];
 			var timeseries = asset[Object.keys(asset)[0]];
 			for (let i=0; i < timeseries.length; i++){
@@ -126,11 +130,15 @@
 				}
 				else{
 					price = parseFloat(timeseries[i]['price']);
-					holding = asset['holdings'];
+					holding = parseFloat(asset['holdings']);
 					array[i] += price * holding;
 				}
 			}
 		}
 		
+		for (let i=0; i < array.length; i++){
+			array[i] += capital;
+		}
+		debugger;
 		return array;
 	}

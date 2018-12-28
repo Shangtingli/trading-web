@@ -88,6 +88,7 @@ public class Chart extends HttpServlet {
 	private void LoginMode(HttpServletRequest request, HttpServletResponse response) {
 		MySQLConnection conn = new MySQLConnection();
 		String userid= request.getParameter("userid");
+		double balance = conn.getUserMeta(userid).get("balance");
 		Map<String, Double> map = conn.getHoldings(userid);
 		int interval = Integer.parseInt(request.getParameter("interval"));
 		try {
@@ -106,6 +107,9 @@ public class Chart extends HttpServlet {
 				asset_info.put(asset, arr).put("holdings", Double.toString(entry.getValue()));
 				array.put(asset_info);
 			}
+			JSONObject object = new JSONObject();
+			object.put("capital",Double.toString(balance));
+			array.put(object);
 			RpcHelper.writeJsonArray(response, array);
 		}
 		catch(Exception e) {
