@@ -1,4 +1,7 @@
 	function loadUserMetaData(){
+		if ($('#username').val().length === 0){
+			return;
+		}
 		var url = './usermeta';
 		var params = 'userid=' + $('#username').val();
 		var req = JSON.stringify({});
@@ -44,7 +47,8 @@
 		var userid = $('#username').val()
 		var interval = '1';
 		var url = './chart';
-		var params = 'userid=' + userid + '&interval=' + interval;
+		var dataLength = 30;
+		var params = 'userid=' + userid + '&interval=' + interval + '&length=' + dataLength;
 		if (userid.length ===0)
 		{
 			for (let i =0; i < DEFAULT_PORTFOLIO.length; i++){
@@ -55,18 +59,25 @@
 		var req = JSON.stringify({});
 		var user = (userid.length===0) ? ('Default Portfolio'):(userid) ;
 		var title_text = 'Total Value Change Chart For '+ user;
+		$('#total-value-chart').html('');
 		showLoading('Loading User\'s Chart...', $('#total-value-chart'));
 		ajax('GET', url + '?' + params, req,
 				function(res){
 					$('#total-value-chart').html('');
 					var result = JSON.parse(res);
-					var y_array = calculateWorth(result);
-					debugger;
-					var x_array = [];
-					x_array.length = y_array.length;
-					for (let i=1 ; i < x_array.length + 1; i++){
-						x_array[i-1] = i;
+					var y_array = calculateWorth(result,dataLength);
+//					var x_array = getTimeAxis(result,dataLength);
+					var x_array = []
+					x_array.length = dataLength;
+					for (let i=0 ;i < x_array.length; i++){
+						x_array[i] = i;
 					}
+					var dateObj = new Date();
+					var day = dateObj.toDateString();
+					var hour = dateObj.getHours();
+						
+					var x_title = 'Day of ' + day + ' during ' + hour + ':00';
+					var y_title = 'Value';
 					var trace1 = {
 							x: x_array,
 							y: y_array,
@@ -74,24 +85,24 @@
 					};
 					var data = [trace1];
 					var layout = {
-						x_axis: {
-							title:'time',
-							titlefont: {
+							  title: title_text,
+							  xaxis: {
+							    title: x_title,
+							    titlefont: {
 							      family: 'Courier New, monospace',
 							      size: 18,
 							      color: '#7f7f7f'
 							    }
-						},
-						y_axis: {
-							title:'price',
-							titlefont: {
+							  },
+							  yaxis: {
+							    title: y_title,
+							    titlefont: {
 							      family: 'Courier New, monospace',
 							      size: 18,
 							      color: '#7f7f7f'
 							    }
-						},
-						title: title_text
-					};
+							  }
+							};
 					Plotly.newPlot('total-value-chart', data, layout, {displayModeBar: false});
 				},
 				function(e){
@@ -102,10 +113,10 @@
 	    		
 	}
 	
-	function calculateWorth(result){
+	function calculateWorth(result , dataLength){
 		if (result.length === 1){
 			var array = [];
-			array.length = 100;
+			array.length = dataLength;
 			for (let i =0; i< array.length; i++){
 				array[i] = result[0]['capital'];
 			}
@@ -141,3 +152,36 @@
 		}
 		return array;
 	}
+	
+//	function getTimeAxis(result,dataLength){
+//		if (result.length === 1){
+//			var array = [];
+//			array.length = dataLength;
+//			for (let i =0; i< array.length; i++){
+//				array[i] = result[0]['capital'];
+//			}
+//			return array;
+//		}
+//		
+//		var x_array = [];
+//		x_array.length = dataLength;
+//		var asset = result[0];
+//		var timeseries = asset[Object.keys(asset)[0]];
+//		for (let i=0; i < timeseries.length; i++){
+//			x_array[i] = parseMinute(timeseries[i]['time']);
+//		}
+//		
+//		return x_array
+//	}
+	
+//	function parseMinute(str){
+//		return parseInt(str.split(" ")[1].split(":")[1]);
+//	}
+//	
+//	function parseHour(str){
+//		return str.split(" ")[1].split(":")[0];
+//	}
+//	
+//	function parseDay(str){
+//		return str.split(" ")[0];
+//	}

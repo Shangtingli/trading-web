@@ -101,28 +101,30 @@ public class MySQLTableCreation {
 					+ ")";
 			statement.executeUpdate(sql);
 			
-			
-			sql = "DROP TABLE IF EXISTS tickers";
-			statement.executeUpdate(sql);
-			sql = "CREATE TABLE tickers ("
-					+ "symbol VARCHAR(255) NOT NULL,"
-					+ "name VARCHAR(255) NOT NULL,"
-					+ "PRIMARY KEY (symbol)"
-					+ ")";
-			statement.executeUpdate(sql);
-			String[] alphabet = new String[] {
-			"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
-			};
-			List<String> fragments = getPermutation(alphabet, 2);
-			HashMap<String, String> tickerInfo = api.getAllSymbols(fragments);
-			for (Map.Entry<String, String> entry : tickerInfo.entrySet()) {
-				String symbol = entry.getKey();
-				String name = entry.getValue();
-				sql = "INSERT INTO tickers(symbol, name) VALUES(?,?)";
-				PreparedStatement pStatement = conn.prepareStatement(sql);
-				pStatement.setString(1, symbol);
-				pStatement.setString(2, name);
-				pStatement.execute();
+			boolean createTickers  = false;
+			if (createTickers) {
+				sql = "DROP TABLE IF EXISTS tickers";
+				statement.executeUpdate(sql);
+				sql = "CREATE TABLE tickers ("
+						+ "symbol VARCHAR(255) NOT NULL,"
+						+ "name VARCHAR(255) NOT NULL,"
+						+ "PRIMARY KEY (symbol)"
+						+ ")";
+				statement.executeUpdate(sql);
+				String[] alphabet = new String[] {
+				"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+				};
+				List<String> fragments = getPermutation(alphabet, 2);
+				HashMap<String, String> tickerInfo = api.getAllSymbols(fragments);
+				for (Map.Entry<String, String> entry : tickerInfo.entrySet()) {
+					String symbol = entry.getKey();
+					String name = entry.getValue();
+					sql = "INSERT INTO tickers(symbol, name) VALUES(?,?)";
+					PreparedStatement pStatement = conn.prepareStatement(sql);
+					pStatement.setString(1, symbol);
+					pStatement.setString(2, name);
+					pStatement.execute();
+				}
 			}
 			System.out.println("DataBase Creation Complete");
 			

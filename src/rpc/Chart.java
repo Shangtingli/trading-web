@@ -56,15 +56,17 @@ public class Chart extends HttpServlet {
 		MySQLConnection conn = new MySQLConnection();
 		Map<String, String[]> map =request.getParameterMap();
 		int interval = Integer.parseInt(map.get("interval")[0]);
+		int length = Integer.parseInt(map.get("length")[0]);
 		try {
 			JSONArray array = new JSONArray();
 			for (Map.Entry<String, String[]> entry : map.entrySet()) {
-				if (entry.getKey().equals("interval") || entry.getKey().equals("userid")) {
+				if (entry.getKey().equals("interval") || entry.getKey().equals("userid") || entry.getKey().equals("length")) {
 					continue;
 				}
 				JSONObject asset_info = new JSONObject();
 				String asset = entry.getValue()[0];
 				List<Item> itemList = conn.getAllPrices(asset, interval);
+				itemList = itemList.subList(itemList.size()-length, itemList.size());
 				JSONArray arr = new JSONArray();
 				for (Item item : itemList) {
 					JSONObject obj = new JSONObject();
@@ -91,12 +93,14 @@ public class Chart extends HttpServlet {
 		double balance = conn.getUserMeta(userid).get("balance");
 		Map<String, Double> map = conn.getHoldings(userid);
 		int interval = Integer.parseInt(request.getParameter("interval"));
+		int length = Integer.parseInt(request.getParameter("length"));
 		try {
 			JSONArray array = new JSONArray();
 			for (Map.Entry<String, Double> entry : map.entrySet()) {
 				JSONObject asset_info = new JSONObject();
 				String asset = entry.getKey();
 				List<Item> itemList = conn.getAllPrices(asset, interval);
+				itemList = itemList.subList(itemList.size()-length, itemList.size());
 				JSONArray arr = new JSONArray();
 				for (Item item : itemList) {
 					JSONObject obj = new JSONObject();

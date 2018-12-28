@@ -31,9 +31,14 @@
 		first_call_loadWatchList();
 		var time = undefined;
 		if (time !== undefined)
-		{var timeInt = setInterval(loadWatchList,time*1000);}
+		{
+			var timeChange = setInterval(triggerChange,time*1000);
+		}
 	}
 	
+	function triggerChange(){
+		$('#username').trigger('change');
+	}
 	function destroyLogin(){
 		showElement($('#search-bar-login-prompt'));
 		showElement($("#login-button"));
