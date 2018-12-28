@@ -67,7 +67,25 @@
 							mode: 'lines+markers'
 					};
 					var data = [trace1];
-					var layout = {};
+					var layout = {
+						x_axis: {
+							title:'time',
+							titlefont: {
+							      family: 'Courier New, monospace',
+							      size: 18,
+							      color: '#7f7f7f'
+							    }
+						},
+						y_axis: {
+							title:'price',
+							titlefont: {
+							      family: 'Courier New, monospace',
+							      size: 18,
+							      color: '#7f7f7f'
+							    }
+						},
+						title: 'Total Value Change Chart'
+					};
 					Plotly.newPlot('total-value-chart', data, layout, {showSendToCloud: true});
 				},
 				function(e){

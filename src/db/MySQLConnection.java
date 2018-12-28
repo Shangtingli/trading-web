@@ -251,9 +251,8 @@ public class MySQLConnection {
 			double price = records.get(len-1).getOpen();
 			double balanceChanged = (action.equals("buy")) ? (price * amount):(- price * amount);
 			Map<String, Double> metadata = getUserMeta(userid);
-			double total_value = metadata.get("total_value");
 			double capital = metadata.get("balance");
-			if (balanceChanged > Math.min(total_value, capital)) {
+			if (balanceChanged > capital) {
 				res.put("result", "failure").put("reason","amount");
 				return res;
 			}
