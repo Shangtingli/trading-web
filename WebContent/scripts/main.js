@@ -55,6 +55,7 @@
 			'<div id = "assets-holdings">' +		
 			'</div></div>');
 		loadWatchList();
+		initBalanceChart();
 	}
     window.onload = init;
 })();

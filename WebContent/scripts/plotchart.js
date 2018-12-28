@@ -41,15 +41,18 @@
 	}
 	
 	function initBalanceChart(){
+		var userid = $('#username').val()
 		var interval = '1';
 		var url = './chart';
-		var params = 'interval=' + interval;
+		var params = 'userid=' + userid + '&interval=' + interval;
 		for (let i =0; i < DEFAULT_PORTFOLIO.length; i++){
 			var asset = DEFAULT_PORTFOLIO[i];
 			params += '&asset' + i.toString() + '=' + asset;
 		}
 		var req = JSON.stringify({});
-		showLoading('Loading WatchList...', $('#total-value-chart'));
+		var user = (userid.length===0) ? ('Default Portfolio'):(userid) ;
+		var title_text = 'Total Value Change Chart For '+ user;
+		showLoading('Loading User Metadata...', $('#total-value-chart'));
 		ajax('GET', url + '?' + params, req,
 				function(res){
 					$('#total-value-chart').html('');
@@ -84,7 +87,7 @@
 							      color: '#7f7f7f'
 							    }
 						},
-						title: 'Total Value Change Chart'
+						title: title_text
 					};
 					Plotly.newPlot('total-value-chart', data, layout, {displayModeBar: false});
 				},
@@ -97,6 +100,15 @@
 	}
 	
 	function calculateWorth(result){
+		if (result.length === 0){
+			var array = [];
+			array.length = 100;
+			for (let i =0; i< array.length; i++){
+				array[i] = 0;
+			}
+			return array;
+		}
+		var userid = $('#username').val();
 		var first_asset = result[0];
 		var len = first_asset[Object.keys(first_asset)[0]].length;
 		var array = [];
@@ -108,7 +120,15 @@
 			var asset = result[j];
 			var timeseries = asset[Object.keys(asset)[0]];
 			for (let i=0; i < timeseries.length; i++){
-				array[i] += parseFloat(timeseries[i]['price']) * DEFAULT_HOLDINGS[j];
+				if (userid.length === 0)
+				{
+					array[i] += parseFloat(timeseries[i]['price']) * DEFAULT_HOLDINGS[j];
+				}
+				else{
+					price = parseFloat(timeseries[i]['price']);
+					holding = asset['holdings'];
+					array[i] += price * holding;
+				}
 			}
 		}
 		
