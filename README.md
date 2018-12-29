@@ -28,7 +28,6 @@ Programming languages used: **Java, Javascript (JQuery), HTML, CSS, Python**
 * Download the [Project](https://github.com/Shangtingli/trading-web/archive/master.zip)
 
 #### Building The Database
-* Make sure python, mysql works in your machine
 * Change mysql utilities in **db/MySQLDBUtil.java**
 * Also if you have a premium AlphaVantage API you can change the API_KEY in **external/AlphaVantageAPI.java**
 
