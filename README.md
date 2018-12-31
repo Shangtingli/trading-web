@@ -3,7 +3,7 @@
 This project help people practice their market views and make them learn how to invest
 
 
-Programming languages used: **Java, Javascript (JQuery), HTML, CSS, Python**
+Languages: **Java, Javascript (JQuery), HTML, CSS, Python**
 
 ---
 ### Main Features
